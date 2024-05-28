@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>RectpackSharp</id>
+    <version>1.2.0</version>
+    <title>RectpackSharp</title>
+    <authors>ThomasMiz</authors>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <icon>packsharp-logo.png</icon>
+    <readme>README.md</readme>
+    <projectUrl>https://github.com/ThomasMiz/RectpackSharp</projectUrl>
+    <description>A lightweight library for packing a list of rectangles into a bin as small as possible.</description>
+    <releaseNotes>- Added Span support on .NET 5.0 and greater</releaseNotes>
+    <tags>rectangles rectpack pack packer textureatlas spritesheet texturepacker</tags>
+    <repository type="git" url="https://github.com/ThomasMiz/RectpackSharp" commit="a08a8b004caa03241ef49a9e7f5d2b5eafa3cd2c" />
+    <dependencies>
+      <group targetFramework="net5.0">
+        <dependency id="Microsoft.Bcl.HashCode" version="1.1.1" exclude="Build,Analyzers" />
+        <dependency id="System.Memory" version="4.5.4" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Microsoft.Bcl.HashCode" version="1.1.1" exclude="Build,Analyzers" />
+        <dependency id="System.Memory" version="4.5.4" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

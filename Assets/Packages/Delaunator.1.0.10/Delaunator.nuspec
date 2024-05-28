@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Delaunator</id>
+    <version>1.0.10</version>
+    <authors>nol1fe</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <projectUrl>https://github.com/nol1fe/delaunator-sharp</projectUrl>
+    <description>Fast Delaunay triangulation of 2D points
+Port from Mapbox's Delaunator project (JavaScript).</description>
+    <releaseNotes>Hull property access set to public</releaseNotes>
+    <copyright>https://github.com/mapbox/delaunator</copyright>
+    <tags>delaunay triangulation voronoi</tags>
+    <repository url="https://github.com/nol1fe/delaunator-sharp.git" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.7.1" />
+      <group targetFramework=".NETStandard2.0" />
+    </dependencies>
+  </metadata>
+</package>
