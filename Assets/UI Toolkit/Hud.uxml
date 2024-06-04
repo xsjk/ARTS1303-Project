@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Hud.uss?fileID=7433441132597879392&amp;guid=116d8b4930e1745d4aeb5d564fe88c0c&amp;type=3#Hud" />
+    <ui:VisualElement name="Root" style="flex-grow: 1; flex-direction: row;">
+        <ui:VisualElement name="Left" style="flex-grow: 0; flex-basis: 20%;" />
+        <ui:VisualElement name="Mid" style="flex-grow: 1; flex-basis: 60%; flex-direction: column-reverse;">
+            <ui:VisualElement name="Bottom" style="flex-grow: 0; bottom: auto; top: auto; height: 33%; flex-shrink: 0; align-items: center;">
+                <ui:ListView name="Interaction" reorder-mode="Simple" style="width: auto; height: auto;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="Right" style="flex-grow: 0; flex-basis: 20%;" />
+    </ui:VisualElement>
+</ui:UXML>

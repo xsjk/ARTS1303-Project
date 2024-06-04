@@ -45,7 +45,10 @@ public interface IDungeonRoom
 
     public GameObject PopWall(WallOrientation wo);
 
-    public void Connect(IDungeonRoom other)
+    // Connect the Room with another Room
+    // Return true if the connection is successful
+    // Return false if the connection is not successful due to no available orientation
+    public bool Connect(IDungeonRoom other)
     {
         var thisAvailable = GetAvailableOrientation();
         var otherAvailable = other.GetAvailableOrientation();
@@ -57,6 +60,10 @@ public interface IDungeonRoom
             {
                 availableWallOrientation.Add((wo, thisAvailable[wo] + otherAvailable[oppositeWo]));
             }
+        }
+        if(availableWallOrientation.Count == 0)
+        {
+            return false;
         }
 
         var (thisWallOrientation, _) = availableWallOrientation.OrderBy(t => t.Item2).First();
@@ -73,6 +80,7 @@ public interface IDungeonRoom
 
         thisTeleport.teleportTarget = otherTeleport.gameObject;
         otherTeleport.teleportTarget = thisTeleport.gameObject;
+        return true;
     }
     
     PackingRectangle Pack()

@@ -1,11 +1,6 @@
 using System;
 using UnityEngine;
 
-public enum KeyBinding
-{
-    PrimaryInteraction,
-    SecondaryInteraction,
-}
 
 public struct InteractableAction
 {

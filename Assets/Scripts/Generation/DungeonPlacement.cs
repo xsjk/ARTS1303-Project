@@ -39,25 +39,38 @@ public class DungeonPlacement
             value.Room.Place(value.Position);
             roomIdLookup[room.Id] = value;
         }
-        
+
         // https://stackoverflow.com/questions/64352847/unity-custom-editor-raycast-not-working-right-after-when-instantiate-objects
         Physics.SyncTransforms();
         Physics.simulationMode = SimulationMode.Script;
         Physics.Simulate(Time.fixedDeltaTime);
         Physics.simulationMode = SimulationMode.FixedUpdate;
-        
-        
+
+
         var edges = DelaunateRooms(roomValues);
         edges.Sort((x, y) => x.Distance.CompareTo(y.Distance));
-        DisjointSet disjointSet = new DisjointSet(roomValues.Count);
-        
+
+        var disjointSet = new DisjointSet(roomValues.Count);
+
         foreach (var edge in edges)
         {
             if (disjointSet.Find(edge.From) != disjointSet.Find(edge.To))
             {
                 Debug.Log($"Connecting Room {roomValues[edge.From].Room.Id} to Room {roomValues[edge.To].Room.Id}");
-                disjointSet.Union(edge.From, edge.To);
-                roomValues[edge.From].Room.Connect(roomValues[edge.To].Room);
+                var succeeded = roomValues[edge.From].Room.Connect(roomValues[edge.To].Room);
+                if (succeeded)
+                {
+                    disjointSet.Union(edge.From, edge.To);
+                }
+            }
+        }
+
+        for (var i = 1; i < roomValues.Count; i++)
+        {
+            if (disjointSet.Find(0) != disjointSet.Find(i))
+            {
+                // If there exists two rooms that are not connected, throw an exception
+                throw new System.Exception("Not all rooms are connected");
             }
         }
     }

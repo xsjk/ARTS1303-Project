@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Background" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.5); flex-direction: row; align-items: center; padding-top: 2.5%; padding-left: 5%; padding-bottom: 2.5%; padding-right: 5%; height: 80px; width: 384px;">
+        <ui:Image tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="KeyImage" style="width: 64px; height: 64px; margin-top: 0; margin-right: 5%; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Prompt" style="flex-grow: 1; align-self: auto; -unity-text-align: upper-center; -unity-text-outline-color: rgba(32, 32, 32, 0); color: rgb(191, 191, 191); font-size: 24px;" />
+    </ui:VisualElement>
+</ui:UXML>

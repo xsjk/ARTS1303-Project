@@ -1,0 +1,14 @@
+VisualElement {
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgb(255, 25, 0);
+    border-right-color: rgb(255, 25, 0);
+    border-top-color: rgb(255, 25, 0);
+    border-bottom-color: rgb(255, 25, 0);
+}
+
+.unity-list-view__empty-label {
+    display: none;
+}
