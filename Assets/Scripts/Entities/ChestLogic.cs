@@ -39,13 +39,14 @@ namespace Entities
                 return new InteractableAction[] { };
             }
 
+            var disabled = !_chestLidRotationLogic.IsChestOpen() || !_itemStack.AllowInteract();
             return new[]
             {
                 new InteractableAction
                 {
                     Key = KeyBinding.PrimaryInteraction,
-                    Prompt = $"Take {_itemStack.Peek().Name}",
-                    Disabled = !_chestLidRotationLogic.IsChestOpen() || !_itemStack.AllowInteract()
+                    Prompt = $"Take {_itemStack.Peek().Name} {(disabled ? "(Disabled)" : "")}",
+                    Disabled = disabled
                 }
             };
         }
