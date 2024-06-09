@@ -1,4 +1,6 @@
 using System.Linq;
+using Entities;
+using Items;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -38,6 +40,7 @@ namespace Player
 
         public void SetActions(InteractableAction[] availableActions, bool invalidate)
         {
+            invalidate = invalidate || _availableActions.Length != availableActions.Length;
             if (!invalidate)
             {
                 if (_switchingProgress < 0.5f)
@@ -93,6 +96,7 @@ namespace Player
         }
     }
 
+    [RequireComponent(typeof(Inventory))]
     public class InteractableDetection : MonoBehaviour
     {
         private GameObject _activeGameObject;
@@ -101,6 +105,7 @@ namespace Player
         private readonly Collider[] _colliders = new Collider[8];
         private UIDocument _uiDocument;
         private InteractableRender _interactableRender;
+        private Inventory _playerInventory;
 
 
         public float detectionRadius = 2.0f;
@@ -113,6 +118,7 @@ namespace Player
         public void Start()
         {
             _uiDocument = hud.GetComponent<UIDocument>();
+            _playerInventory = GetComponent<Inventory>();
             _interactableRender = new InteractableRender(_uiDocument.rootVisualElement.Q<ListView>("Interaction"), interactableActionTemplate);
         }
 
@@ -127,7 +133,7 @@ namespace Player
             {
                 if (action.Key != activeKey) continue;
                 if (action.Disabled) continue;
-                _activeInteractable.Interact(action.Key);
+                _activeInteractable.Interact(action.Key, _playerInventory);
                 return;
             }
         }

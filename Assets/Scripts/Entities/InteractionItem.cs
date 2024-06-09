@@ -1,22 +1,23 @@
-using System;
-using UnityEngine;
+using Items;
 
-
-public struct InteractableAction
+namespace Entities
 {
-    // key binding
-    public KeyBinding Key;
+    public struct InteractableAction
+    {
+        // key binding
+        public KeyBinding Key;
 
-    // prompt text
-    public string Prompt;
+        // prompt text
+        public string Prompt;
 
-    // is the prompt available
-    public bool Disabled;
-}
+        // is the prompt available
+        public bool Disabled;
+    }
 
-public interface IInteractable
-{
-    public InteractableAction[] AvailableInteractions();
+    public interface IInteractable
+    {
+        public InteractableAction[] AvailableInteractions();
 
-    public void Interact(KeyBinding key);
+        public void Interact(KeyBinding key, Inventory playerInventory);
+    }
 }

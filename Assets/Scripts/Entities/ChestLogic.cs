@@ -1,62 +1,59 @@
-using System.Collections;
+using System.Collections.Generic;
+using Items;
+using Items.Implementation;
 using UnityEngine;
 
 namespace Entities
 {
     public class ChestLogic : MonoBehaviour, IInteractable
     {
-        [SerializeField] public GameObject innerItem;
-        [SerializeField] public Shader shader;
-        public float animationDuration = 2;
-        private Material _innerItemMaterial;
         private ChestLidRotationLogic _chestLidRotationLogic;
-        private static readonly int MainTex = Shader.PropertyToID("_MainTex");
-        private static readonly int Progress = Shader.PropertyToID("_Progress");
+        private ItemStack _itemStack;
+        public Transform innerItemSpawnPoint;
 
         public void Start()
         {
             _chestLidRotationLogic = GetComponent<ChestLidRotationLogic>();
-            var rendererComponent = innerItem.GetComponent<Renderer>();
-            var texture = rendererComponent.sharedMaterial.GetTexture(MainTex);
-            _innerItemMaterial = new Material(shader);
-            _innerItemMaterial.SetTexture(MainTex, texture);
-            rendererComponent.material = _innerItemMaterial;
+            BindItemStack(new List<IInstantiableItem>
+            {
+                new Coin(),
+                new HealthBottle(),
+                new Coin(),
+            });
+        }
+
+        public void BindItemStack(List<IInstantiableItem> items)
+        {
+            var itemStackContainer = new GameObject("ItemStack");
+            itemStackContainer.transform.SetParent(transform);
+            itemStackContainer.transform.position = innerItemSpawnPoint.position;
+            _itemStack = itemStackContainer.AddComponent<ItemStack>();
+            _itemStack.BindItems(items);
         }
 
         public InteractableAction[] AvailableInteractions()
         {
+            if (_itemStack.Empty)
+            {
+                _chestLidRotationLogic.TakeItem();
+                return new InteractableAction[] { };
+            }
+
             return new[]
             {
                 new InteractableAction
                 {
                     Key = KeyBinding.PrimaryInteraction,
-                    Prompt = "Open Chest",
-                    Disabled = !_chestLidRotationLogic.IsChestOpen() || _chestLidRotationLogic.ChestItemTaken
+                    Prompt = $"Take {_itemStack.Peek().Name}",
+                    Disabled = !_chestLidRotationLogic.IsChestOpen() || !_itemStack.AllowInteract()
                 }
             };
         }
 
-        public void Interact(KeyBinding key)
+        public void Interact(KeyBinding key, Inventory playerInventory)
         {
             if (key != KeyBinding.PrimaryInteraction) return;
-            _chestLidRotationLogic.TakeItem();
-            StartCoroutine(AnimateItemDestruction());
-        }
-
-        private IEnumerator AnimateItemDestruction()
-        {
-            float elapsedTime = 0;
-            
-            while(elapsedTime < animationDuration)
-            {
-                elapsedTime += Time.deltaTime;
-                _innerItemMaterial.SetFloat(Progress, Mathf.Lerp(0, 1, elapsedTime / animationDuration));
-                yield return null;
-            }
-
-            gameObject.layer = LayerMask.GetMask("Default");
-            Destroy(innerItem);
-            Destroy(this);
+            playerInventory.AddItem(_itemStack);
         }
     }
 }
