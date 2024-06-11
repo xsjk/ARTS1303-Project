@@ -11,7 +11,7 @@ public class EmptyDungeonRoom : IDungeonRoom
     private static readonly Vector2 StdDev = new(2.5f, 2.5f);
     private static readonly int WallLayer = LayerMask.NameToLayer("Wall");
 
-    private GameObject _room;
+    protected GameObject _room { get; private set; }
 
     private readonly Dictionary<WallOrientation, List<GameObject>> _hallwaySlots = new()
     {
@@ -121,7 +121,7 @@ public class EmptyDungeonRoom : IDungeonRoom
         }
     }
 
-    public void Place(Vector2 position)
+    public virtual void Place(Vector2 position)
     {
         Position = position;
         Debug.Log($"We are placing room {Id} at {position} with size {Size} and padding {Padding}");
@@ -174,11 +174,11 @@ public class EmptyDungeonRoom : IDungeonRoom
         return go;
     }
 
-    public void DecreaseEnemyCount()
+    public virtual void DecreaseEnemyCount()
     {
     }
 
-    public bool RoomCleared()
+    public virtual bool RoomCleared()
     {
         return true;
     }

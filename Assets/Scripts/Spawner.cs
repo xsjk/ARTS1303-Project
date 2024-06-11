@@ -10,7 +10,8 @@ public class Spawner : MonoBehaviour
     void Start()
     {
         _rooms = new List<IDungeonRoom>();
-        for (int i = 0; i < 20; i++)
+        _rooms.Add(new EnemyRoom1());
+        for (int i = 0; i < 19; i++)
         {
             _rooms.Add(new EmptyDungeonRoom());
         }
