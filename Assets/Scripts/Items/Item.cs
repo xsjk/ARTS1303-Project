@@ -1,3 +1,4 @@
+using Effects;
 using UnityEngine;
 
 namespace Items
@@ -10,6 +11,11 @@ namespace Items
         {
         }
 
+        public IEffect ProduceEffect()
+        {
+            return null;
+        }
+        
         public void OnPrimaryInteract()
         {
         }
