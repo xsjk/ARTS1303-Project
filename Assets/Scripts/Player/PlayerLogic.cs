@@ -21,7 +21,7 @@ public class PlayerLogic : MonoBehaviour
         {
             if (hit.CompareTag("Enemy"))
             {
-                var enemy = hit.GetComponent<EmemyLogic>();
+                var enemy = hit.GetComponent<EnemyLogic>();
                 enemy.TakeDamage(1);
                 return;
             }

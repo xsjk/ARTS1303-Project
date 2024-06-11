@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class EmemyLogic : MonoBehaviour
+public class EnemyLogic : MonoBehaviour
 {
     private Animator _animator;
     private IDungeonRoom _room;
