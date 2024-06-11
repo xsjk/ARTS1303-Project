@@ -1,58 +1,9 @@
 using System;
 using UnityEngine;
 
-public class EnemyLogic : MonoBehaviour
+public class SkeletonMageLogic : EnemyLogic
 {
-    protected Animator _animator;
-    protected IDungeonRoom _room;
-    protected GameObject _player;
-    protected Rigidbody _rigidbody;
-    protected AudioSource _audioSource;
-    protected float _attackCooldown;
-    protected float _patrolCooldown;
-    protected float _remainingHealth;
-
-    [SerializeField] public float ViewRange = 20.0f;
-
-    [SerializeField] public float AttackRange = 0.6f;
-
-    [SerializeField] public float AttackCooldown = 3.0f;
-
-    [SerializeField] public float AttackDamage = 1.0f;
-
-    [SerializeField] public float Health = 1.0f;
-
-    [SerializeField] public float PatrolSpeed = 1.0f;
-
-    [SerializeField] public float PatrolCooldown = 5.0f;
-
-    [SerializeField] public float ChaseSpeed = 10.0f;
-
-    [SerializeField] public float TurnSpeed = 10.0f;
-
-    [SerializeField] public float Acceleration = 4.0f;
-
-    [SerializeField] public float Deceleration = 10.0f;
-
-    [SerializeField] public AudioClip HurtSound;
-
-    [SerializeField] public AudioClip DeathSound;
-
-    public void Start()
-    {
-        _remainingHealth = Health;
-        _animator = GetComponent<Animator>();
-        _player = GameObject.FindWithTag("Player");
-        _rigidbody = GetComponent<Rigidbody>();
-        _audioSource = GetComponent<AudioSource>();
-    }
-
-    public void SetRoom(IDungeonRoom room)
-    {
-        _room = room;
-    }
-
-    public virtual void Update()
+    public override void Update()
     {
         if (_room is null || _player is null)
         {
@@ -113,29 +64,4 @@ public class EnemyLogic : MonoBehaviour
             (targetSpeed == 0 ? Deceleration : Acceleration) * Time.deltaTime);
     }
 
-    public bool IsAlive()
-    {
-        return _remainingHealth != 0;
-    }
-
-    public void TakeDamage(float damage)
-    {
-        if (!IsAlive())
-        {
-            return;
-        }
-
-        Debug.Log($"Enemy took {damage} damage!");
-        _remainingHealth -= damage;
-        if (IsAlive())
-        {
-            _audioSource.PlayOneShot(HurtSound);
-            return;
-        }
-
-        _audioSource.PlayOneShot(DeathSound);
-        _animator.SetBool("Alive", false);
-        _room.DecreaseEnemyCount();
-        GetComponent<CapsuleCollider>().enabled = false;
-    }
 }
