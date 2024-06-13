@@ -15,42 +15,60 @@ public abstract class CharacterModel<T> : CharacterModel
 {
     private CharacterController<T> character;
     protected Animator animator;
-    public WeaponLogic[] weaponLogics;
-    protected SkillConfig skillData;
+    public Dictionary<string, WeaponLogic> weaponLogics = new Dictionary<string, WeaponLogic>();
+    protected SkillConfig curSkill;
+
+    private void Awake() {
+        // find weapon names and weapon logics in children and add to the dictionary
+        foreach (var weapon in GetComponentsInChildren<WeaponLogic>()) {
+            weaponLogics.Add(weapon.name, weapon);
+            weapon.Init(this);
+            Debug.Log("Weapon name: " + weapon.name + " Weapon logic: " + weaponLogics[weapon.name]);
+        }
+    }
+
+
     public virtual void Init(CharacterController<T> character)
     {
         this.character = character;
         animator = GetComponent<Animator>();
-        for (int i = 0; i < weaponLogics.Length; i++)
-        {
-            weaponLogics[i].Init(this);
-        }
     }
     public override void PlayAudio(AudioClip audioClip)
     {
         character.PlayAudio(audioClip);
     }
 
-    private int _weaponIndex;
-    public int currHitIndex;
-    public void StartAttack(SkillConfig conf)
+
+    public void ActivateWeapons(SkillConfig conf)
     {
-        currHitIndex = 0;
-        skillData = conf;
-        SetTrigger(skillData.triggerName);
-        Spawn(skillData.releaseConfig.spawn);
-        PlayAudio(skillData.releaseConfig.sound);
+        foreach (var c in conf.weaponConfigs) {
+            if (weaponLogics.ContainsKey(c.weaponName))
+                weaponLogics[c.weaponName].Activate(c);
+            else
+                throw new System.Exception("Weapon name not found: " + c.weaponName);
+        }
+    }
+    public void DeactivateWeapons()
+    {
+        foreach (var weapon in weaponLogics)
+        {
+            weapon.Value.Deactivate();
+        }
+    }
+    public void TriggerSkill(SkillConfig conf)
+    {
+        SetTrigger(conf.triggerName);
+        Spawn(conf.releaseConfig.spawn);
+        PlayAudio(conf.releaseConfig.sound);
+        curSkill = conf;
     }
     
-    private void EndAttack(string skillName)
+    public void FinalizeSkill()
     {
-        if (skillName == skillData.name)
-        {
-            Spawn(skillData.endConfig.spawn);
-            animator.SetTrigger(skillData.overTriggerName);
-            currHitIndex = 0;
-        }
+        Spawn(curSkill.endConfig.spawn);
+        animator.SetTrigger(curSkill.overTriggerName);
         OnSkillOver();
+        curSkill = null;
     }
 
 
@@ -76,9 +94,9 @@ public abstract class CharacterModel<T> : CharacterModel
     private int _currHurtAnimationIndex = 1;
     public void PlayHurtAnimtion(bool isFloat = true)
     {
-        if (skillData != null)
+        if (curSkill != null)
         {
-            animator.ResetTrigger(skillData.triggerName);
+            animator.ResetTrigger(curSkill.triggerName);
         }
         if (isFloat)
         {
@@ -136,26 +154,12 @@ public abstract class CharacterModel<T> : CharacterModel
 
     public void ResetWeapon()
     {
-        for (int i = 0; i < weaponLogics.Length; i++)
-            weaponLogics[i].StopSkillHit();
+        foreach (var weapon in weaponLogics)
+            weapon.Value.Deactivate();
     }
 
     #region Animation Events
 
-    private void ActivateSkillHit()
-    {
-        if (currHitIndex < skillData.hitConfigs.Length)
-        {
-            weaponLogics[_weaponIndex].StartSkillHit(skillData.hitConfigs[currHitIndex]);
-            PlayAudio(skillData.hitConfigs[currHitIndex].sound);
-            currHitIndex++;
-        }
-    }
-    // Stop Skill Damage
-    private void DeactivateSkillHit()
-    {
-        weaponLogics[_weaponIndex].StopSkillHit();
-    }
     protected abstract void OnSkillOver();
 
 
@@ -165,15 +169,15 @@ public abstract class CharacterModel<T> : CharacterModel
 
     public void CharacterMoveForAttack(int index)
     {
-        if (index >= skillData.characterMoveModels.Length)
-            Debug.LogError("index out of range" + index + " " + skillData.characterMoveModels.Length);
-        CharacterMoveModel model = skillData.characterMoveModels[index];
+        if (index >= curSkill.characterMoveModels.Length)
+            Debug.LogError("index out of range" + index + " " + curSkill.characterMoveModels.Length);
+        CharacterMoveModel model = curSkill.characterMoveModels[index];
         character.CharacterAttackMove(model.offset, model.duration);
     }
 
     public void SpawnObj(int index)
     {
-        Spawn(skillData.spawns[index]);
+        Spawn(curSkill.spawns[index]);
     }
     #endregion
 

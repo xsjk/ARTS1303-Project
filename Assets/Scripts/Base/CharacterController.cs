@@ -25,7 +25,7 @@ public abstract class CharacterController<T> : FSMController<T>
             throw new Exception("CharacterModel is not found in " + name);
         model.Init(this);
         characterController = GetComponent<CharacterController>();
-        gameObject.AddComponent<HurtEnter>().action = Hurt;
+        gameObject.AddComponent<DamageHandler>().action = Hurt;
     }
 
     public void Hurt(float hardTime, Transform souceTransform, Vector3 repelVelocity, float repelTransitionTime, float damgeValue)
@@ -66,9 +66,6 @@ public abstract class CharacterController<T> : FSMController<T>
         OnDead();
     }
     protected abstract void OnDead();
-
-    public SkillConfig CurrSkillData { get; protected set; }
-
 
 
     public void CharacterAttackMove(Vector3 target, float time)

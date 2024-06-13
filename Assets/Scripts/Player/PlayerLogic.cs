@@ -8,6 +8,12 @@ public class PlayerLogic : MonoBehaviour
     [SerializeField] public AudioClip AttackSound;
     [SerializeField] public AudioClip HurtSound;
 
+
+    private void Awake() {
+        gameObject.AddComponent<DamageHandler>().action = Hurt;
+    }
+
+
     private void Start()
     {
         _audioSource = GetComponent<AudioSource>();
@@ -37,5 +43,11 @@ public class PlayerLogic : MonoBehaviour
     public void Die()
     {
         Debug.Log("Player died");
+    }
+
+    
+    public void Hurt(float hardTime, Transform souceTransform, Vector3 repelVelocity, float repelTransitionTime, float damgeValue)
+    {
+        Debug.Log("Player hurt " + "hardTime: " + hardTime + " repelVelocity: " + repelVelocity + " repelTransitionTime: " + repelTransitionTime + " damgeValue: " + damgeValue);
     }
 }

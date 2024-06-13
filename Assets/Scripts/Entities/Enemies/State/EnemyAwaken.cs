@@ -17,7 +17,6 @@ public class EnemyAwaken : EnemyStateBase
 
     public override void OnUpdate()
     {
-        Debug.Log("Current Animation Tag: " + model.GetCurrentAnimationTag());
         if (InIdleAnimation())
         {
             enemy.ChangeState<EnemyIdle>();

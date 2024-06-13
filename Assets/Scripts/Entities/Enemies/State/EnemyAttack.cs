@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class EnemyAttack : EnemyStateBase
 {
+    private bool isAttack;
     public override void OnEnter()
     {
         Debug.Log("EnemyAttack Enter");
         enemy.StopNavigation();
+        enemy.Attack();
     }
 
     public override void OnExit()
     {
-        
+        model.DeactivateWeapons();
     }
 
     public override void OnUpdate()
@@ -21,9 +23,15 @@ public class EnemyAttack : EnemyStateBase
         {
             enemy.ChangeState<EnemyChase>();
         }
-        else if (InIdleAnimation())
+        else if (!isAttack && InIdleAnimation())
         {
-            enemy.Attack();
+            Debug.Log("Attack");
+            isAttack = enemy.Attack();
+        }
+        else if (InAttackAnimation())
+        {
+            isAttack = false;
         }
     }
+
 }

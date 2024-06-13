@@ -6,11 +6,17 @@ public abstract class EnemyStateBase : StateBase<EnemyState>
     protected EnemyModel model;
     protected GameObject player = GameObject.FindWithTag("Player");
     readonly int _idleTag = Animator.StringToHash("Idle");
+    readonly int _attackTag = Animator.StringToHash("Attack");
     protected override void OnInit(FSMController<EnemyState> controller, EnemyState stateType)
     {
         base.OnInit(controller, stateType);
         enemy = controller as EnemyController;
         model = enemy.model as EnemyModel;
+    }
+
+    protected bool InAttackAnimation() 
+    {
+        return model.GetCurrentAnimationTag() == _attackTag;
     }
     protected bool InIdleAnimation() 
     {

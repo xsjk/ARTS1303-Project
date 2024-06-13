@@ -26,8 +26,8 @@ public class SkillConfig : ScriptableObject
 
     [Header("Skill Config")]
     public SkillReleaseConfig releaseConfig;
-    public SkillHitConfig[] hitConfigs;
     public SkillEndConfig endConfig;
+    public WeaponConfig[] weaponConfigs;
 }
 
 [Serializable]
@@ -40,8 +40,9 @@ public class SkillReleaseConfig
 }
 
 [Serializable]
-public class SkillHitConfig
+public class WeaponConfig
 {
+    public string weaponName;
     public float damageValue;
     public float hardTime;
     public Vector3 repelVelocity;

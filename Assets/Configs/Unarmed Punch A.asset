@@ -27,7 +27,6 @@ MonoBehaviour:
     sound: {fileID: 0}
     canRotate: 1
     canMove: 1
-  hitConfigs: []
   endConfig:
     spawn:
       prefab: {fileID: 0}
@@ -35,3 +34,17 @@ MonoBehaviour:
       offset: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
       delayTime: 0
+  weaponConfigs:
+  - weaponName: RightHand
+    damageValue: 0.1
+    hardTime: 0
+    repelVelocity: {x: 0, y: 0, z: 0}
+    repelTransitionTime: 0
+    hitEffect: {fileID: 0}
+    spawn:
+      prefab: {fileID: 0}
+      sound: {fileID: 0}
+      offset: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      delayTime: 0
+    sound: {fileID: 0}

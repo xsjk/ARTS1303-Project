@@ -7,17 +7,12 @@ public class EnemyChase : EnemyStateBase
     public override void OnEnter()
     {
         Debug.Log("EnemyChase Enter");
-
         enemy.StartNavigation();
-
-        // TODO Play Run Animation
-        // model.SetAnimation("Run", true);
     }
 
     public override void OnExit()
     {
         enemy.StopNavigation();
-        // model.SetAnimation("Run", false);
     }
 
     public override void OnUpdate()

@@ -129,18 +129,21 @@ public class EnemyController : CharacterController<EnemyState>
     #region Attack
     public bool Attack()
     {
-        for (int i = 0; i < SkillModels.Length; i++)
+        model.DeactivateWeapons();
+        foreach(var skillModel in SkillModels)
         {
-            if(SkillModels[i].Ready)
+            if (skillModel.Ready)
             {
-                CurrSkillData = SkillModels[i].skill;
-                model.StartAttack(CurrSkillData);
-                SkillModels[i].OnRelease(); // refresh CD
+                model.ActivateWeapons(skillModel.skill);
+                model.TriggerSkill(skillModel.skill);
+                skillModel.OnRelease();
                 return true;
             }
         }
         return false;
     }
+
+
 
     #endregion
 
