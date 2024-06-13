@@ -298,6 +298,18 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 18594c861de9a46238e967ee1f2bcbfd, type: 3}
       insertIndex: -1
       addedObject: {fileID: -1606438446312201865}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 18594c861de9a46238e967ee1f2bcbfd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6304323081244521471}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 18594c861de9a46238e967ee1f2bcbfd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7108313896703234688}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 18594c861de9a46238e967ee1f2bcbfd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6924886526462167980}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 18594c861de9a46238e967ee1f2bcbfd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2241453781711426216}
   m_SourcePrefab: {fileID: 100100000, guid: 18594c861de9a46238e967ee1f2bcbfd, type: 3}
 --- !u!1 &5249953262102364197 stripped
 GameObject:
@@ -314,7 +326,7 @@ Animator:
   m_GameObject: {fileID: 5249953262102364197}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 5656c989de08138418d1764461dbe37a, type: 2}
+  m_Controller: {fileID: 9100000, guid: ee8f28bfe53eb804c93e563e51187aab, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -478,7 +490,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5249953262102364197}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8147aa42658a016499bb30bb48c99443, type: 3}
   m_Name: 
@@ -496,6 +508,122 @@ MonoBehaviour:
   Deceleration: 10
   HurtSound: {fileID: 8300000, guid: 97ad7a5379f4b4131a2df95a06accc21, type: 3}
   DeathSound: {fileID: 8300000, guid: 486293b784472423ca9ae70a50610977, type: 3}
+--- !u!195 &6304323081244521471
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5249953262102364197}
+  m_Enabled: 0
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!143 &7108313896703234688
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5249953262102364197}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6924886526462167980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5249953262102364197}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78606bd22fadc5547a15ab9b5a37007f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curState: 0
+  maxHp: 1
+  isDead: 0
+  SkillModels:
+  - skill: {fileID: 11400000, guid: 4c2d6335698f0e34b95ec869b93cc109, type: 2}
+    KeyCode: 0
+    CD: 5
+  - skill: {fileID: 11400000, guid: 1f6226584858c4648bc67ef9e449f13e, type: 2}
+    KeyCode: 0
+    CD: 4
+  - skill: {fileID: 11400000, guid: 75c6d01623f77da4dabf48800f465f25, type: 2}
+    KeyCode: 0
+    CD: 3
+  config:
+    ChaseRange: 10
+    AttackRange: 5
+    AttackCooldown: 3
+    AttackDamage: 1
+    Health: 1
+    PatrolSpeed: 1
+    PatrolCooldown: 5
+    ChaseSpeed: 10
+    TurnSpeed: 10
+    Acceleration: 4
+    Deceleration: 10
+    HurtSound: {fileID: 8300000, guid: 5a702412428b34672b3af6b80c9a4811, type: 3}
+    DeathSound: {fileID: 8300000, guid: 486293b784472423ca9ae70a50610977, type: 3}
+    animationModel:
+      initType: 2
+      awakeType: 0
+      Idle: 0
+      Idle_Tired: 0
+      Idle_Combat: 1
+      Idle_Unarmed: 0
+      Idle_2H_Melee: 0
+      Walk_A: 0
+      Walk_B: 1
+      Walk_C: 0
+      Walk_D: 0
+      Run_A: 0
+      Run_B: 1
+      Run_C: 0
+  moveMotion: {x: 0, y: -9, z: 0}
+  HpBarPrefab: {fileID: 0}
+--- !u!114 &2241453781711426216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5249953262102364197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ad17eadb4ed6444bacaeb68ab05be6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5898059511335291162 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -7655872403321392018, guid: 18594c861de9a46238e967ee1f2bcbfd, type: 3}
