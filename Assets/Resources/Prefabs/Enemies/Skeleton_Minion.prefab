@@ -71,6 +71,18 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 01b0f8098bb4f4ffe815c733080825d1, type: 3}
       insertIndex: -1
       addedObject: {fileID: -2882847069708970749}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 01b0f8098bb4f4ffe815c733080825d1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8954676749292751018}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 01b0f8098bb4f4ffe815c733080825d1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5401976089045736641}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 01b0f8098bb4f4ffe815c733080825d1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6211718486806744515}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 01b0f8098bb4f4ffe815c733080825d1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7087403323643352811}
   m_SourcePrefab: {fileID: 100100000, guid: 01b0f8098bb4f4ffe815c733080825d1, type: 3}
 --- !u!1 &2953558979814737449 stripped
 GameObject:
@@ -87,7 +99,7 @@ Animator:
   m_GameObject: {fileID: 2953558979814737449}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 5cf32f4440910d146bcde29a2a28687f, type: 2}
+  m_Controller: {fileID: 9100000, guid: ee8f28bfe53eb804c93e563e51187aab, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -251,13 +263,46 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2953558979814737449}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2230b7ab31c9ea45998713105cd7323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ViewRange: 20
-  AttackRange: 0.6
+  AttackRange: 1
+  AttackCooldown: 3
+  AttackDamage: 1
+  Health: 1
+  PatrolSpeed: 1
+  PatrolCooldown: 5
+  ChaseSpeed: 10
+  TurnSpeed: 10
+  Acceleration: 4
+  Deceleration: 10
+  HurtSound: {fileID: 8300000, guid: 97ad7a5379f4b4131a2df95a06accc21, type: 3}
+  DeathSound: {fileID: 8300000, guid: 486293b784472423ca9ae70a50610977, type: 3}
+--- !u!114 &8954676749292751018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2953558979814737449}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78606bd22fadc5547a15ab9b5a37007f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curState: 0
+  maxHp: 1
+  isDead: 0
+  SkillModels:
+  - skill: {fileID: 11400000, guid: 29176e3eb08437246aff4c5a79793c39, type: 2}
+    KeyCode: 0
+    CoolDownTime: 1
+    curTime: 0
+  ChaseRange: 10
+  AttackRange: 1.1
   AttackCooldown: 3
   AttackDamage: 1
   Health: 1
@@ -269,3 +314,71 @@ MonoBehaviour:
   Deceleration: 10
   HurtSound: {fileID: 0}
   DeathSound: {fileID: 0}
+  animationConfig:
+    initType: 0
+    idleType: 0
+    moveType: 0
+  moveMotion: {x: 0, y: -9, z: 0}
+  HpBarPrefab: {fileID: 0}
+--- !u!195 &-5401976089045736641
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2953558979814737449}
+  m_Enabled: 0
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!143 &6211718486806744515
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2953558979814737449}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7087403323643352811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2953558979814737449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ad17eadb4ed6444bacaeb68ab05be6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WeaponLogics: []
+  currHitIndex: 0

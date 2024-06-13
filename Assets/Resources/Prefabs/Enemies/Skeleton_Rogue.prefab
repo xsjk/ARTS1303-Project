@@ -257,7 +257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ViewRange: 20
-  AttackRange: 0.6
+  AttackRange: 1.5
   AttackCooldown: 3
   AttackDamage: 1
   Health: 1
@@ -267,5 +267,5 @@ MonoBehaviour:
   TurnSpeed: 10
   Acceleration: 4
   Deceleration: 10
-  HurtSound: {fileID: 0}
-  DeathSound: {fileID: 0}
+  HurtSound: {fileID: 8300000, guid: 97ad7a5379f4b4131a2df95a06accc21, type: 3}
+  DeathSound: {fileID: 8300000, guid: 486293b784472423ca9ae70a50610977, type: 3}

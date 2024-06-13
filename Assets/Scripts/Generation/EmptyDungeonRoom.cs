@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 using Object = UnityEngine.Object;
 
 public class EmptyDungeonRoom : IDungeonRoom
@@ -121,6 +123,23 @@ public class EmptyDungeonRoom : IDungeonRoom
         }
     }
 
+    private void CreateNavMesh(GameObject parent) {
+        // add nav mesh to the parent and dynamic bake for all the children
+        var navMesh = parent.AddComponent<NavMeshSurface>();
+
+        // // add mesh collider to all children
+        // foreach (var mf in parent.GetComponentsInChildren<MeshFilter>())
+        // {
+        //     var go = mf.gameObject;
+        //     if (go.GetComponent<MeshCollider>() == null)
+        //         go.AddComponent<MeshCollider>();
+        // }
+
+        // build with physics collider instead of render mesh
+        navMesh.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
+
+        navMesh.BuildNavMesh();
+    }
     public virtual void Place(Vector2 position)
     {
         Position = position;
@@ -148,6 +167,7 @@ public class EmptyDungeonRoom : IDungeonRoom
             new Vector3(Size.x / 2, DungeonRoomPrefabManager.Height, Size.y / 2),
             DungeonRoomPrefabManager.Instance.CeilingPrefab,
             DungeonRoomPrefabManager.Instance.CeilingBounds.size);
+        CreateNavMesh(_room);
     }
 
     public Dictionary<WallOrientation, int> GetAvailableOrientation()

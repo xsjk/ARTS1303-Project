@@ -8,10 +8,10 @@ public class EnemyRoom1 : EmptyDungeonRoom
 
     private GameObject makeEnemy(Vector2 position)
     {
-        var enemy = EnemyManager.Spawn(EnemyType.Skeleton_Mage);
-        enemy.transform.parent = _room.transform;
+        var enemy = EnemyManager.Spawn(EnemyType.Skeleton_Minion, _room.transform);
         enemy.transform.localPosition = new Vector3(position.x, 0, position.y);
         enemy.GetComponent<EnemyLogic>().SetRoom(this);
+        enemy.GetComponent<EnemyController>().SetRoom(this);
         return enemy;
     }
 

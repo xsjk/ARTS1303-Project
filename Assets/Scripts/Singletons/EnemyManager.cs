@@ -18,9 +18,9 @@ public class EnemyManager {
         { EnemyType.Skeleton_Mage, Resources.Load<GameObject>("Prefabs/Enemies/Skeleton_Mage") },
     };
 
-    public static GameObject Spawn(EnemyType enemyType) {
+    public static GameObject Spawn(EnemyType enemyType, Transform parent = null) {
         if (_enemyPrefabs.ContainsKey(enemyType))
-            return Object.Instantiate(_enemyPrefabs[enemyType]);
+            return Object.Instantiate(_enemyPrefabs[enemyType], parent);
         else
             throw new System.Exception("Unknown enemy type: " + enemyType);
     }

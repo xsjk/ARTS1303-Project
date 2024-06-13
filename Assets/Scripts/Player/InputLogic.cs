@@ -86,8 +86,8 @@ public class InputLogic : MonoBehaviour
     {
         _animator.SetFloat("Speed", _rigidbody.velocity.y);
         _animator.SetFloat("Direction", _rigidbody.velocity.x);
-        Debug.Log("speed " + _rigidbody.velocity.y);
-        Debug.Log("direction " + _rigidbody.velocity.x);
+        // Debug.Log("speed " + _rigidbody.velocity.y);
+        // Debug.Log("direction " + _rigidbody.velocity.x);
     }
 
     // Start is called before the first frame update
