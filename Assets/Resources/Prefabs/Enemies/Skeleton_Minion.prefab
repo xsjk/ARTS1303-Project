@@ -297,27 +297,44 @@ MonoBehaviour:
   maxHp: 1
   isDead: 0
   SkillModels:
+  - skill: {fileID: 11400000, guid: 85b2c5998cf638242b0d49e121c36ec6, type: 2}
+    KeyCode: 0
+    CD: 1
+  - skill: {fileID: 11400000, guid: f064880aaf991fd4e99b0cd6a7ccea5c, type: 2}
+    KeyCode: 0
+    CD: 2
   - skill: {fileID: 11400000, guid: 29176e3eb08437246aff4c5a79793c39, type: 2}
     KeyCode: 0
-    CoolDownTime: 1
-    curTime: 0
-  ChaseRange: 10
-  AttackRange: 1.1
-  AttackCooldown: 3
-  AttackDamage: 1
-  Health: 1
-  PatrolSpeed: 1
-  PatrolCooldown: 5
-  ChaseSpeed: 10
-  TurnSpeed: 10
-  Acceleration: 4
-  Deceleration: 10
-  HurtSound: {fileID: 0}
-  DeathSound: {fileID: 0}
-  animationConfig:
-    initType: 0
-    idleType: 0
-    moveType: 0
+    CD: 3
+  config:
+    ChaseRange: 10
+    AttackRange: 2
+    AttackCooldown: 3
+    AttackDamage: 1
+    Health: 1
+    PatrolSpeed: 1
+    PatrolCooldown: 5
+    ChaseSpeed: 10
+    TurnSpeed: 10
+    Acceleration: 4
+    Deceleration: 10
+    HurtSound: {fileID: 8300000, guid: 5a702412428b34672b3af6b80c9a4811, type: 3}
+    DeathSound: {fileID: 8300000, guid: 486293b784472423ca9ae70a50610977, type: 3}
+    animationModel:
+      initType: 3
+      awakeType: 0
+      Idle: 0
+      Idle_Tired: 0
+      Idle_Combat: 1
+      Idle_Unarmed: 0
+      Idle_2H_Melee: 0
+      Walk_A: 0
+      Walk_B: 1
+      Walk_C: 0
+      Walk_D: 0
+      Run_A: 0
+      Run_B: 1
+      Run_C: 0
   moveMotion: {x: 0, y: -9, z: 0}
   HpBarPrefab: {fileID: 0}
 --- !u!195 &-5401976089045736641
@@ -330,8 +347,8 @@ NavMeshAgent:
   m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
+  m_Speed: 2
+  m_Acceleration: 2
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
@@ -380,5 +397,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59ad17eadb4ed6444bacaeb68ab05be6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WeaponLogics: []
+  weaponLogics: []
   currHitIndex: 0

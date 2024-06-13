@@ -15,8 +15,7 @@ public abstract class FSMController<T> : MonoBehaviour
     {
         if (newState.Equals(curState) && ignoreSame)
             return;
-        if (state != null)
-            state.OnExit();
+        state?.OnExit();
         curState = newState;
         state = GetStateObj<K>(newState);
         state.OnEnter();

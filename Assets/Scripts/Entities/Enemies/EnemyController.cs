@@ -5,23 +5,12 @@ using UnityEngine.AI;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using InitType = EnemyAnimationModel.InitType;
-public enum EnemyState
-{
-    EnemyPreSpawn,
-    EnemyInactive,
-    EnemyIdle,
-    EnemyMove,
-    EnemyChase,
-    EnemyAttack,
-    EnemyHurt,
-    EnemyDead,
-}
+
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class EnemyController : CharacterController<EnemyState>
 {
    
-    protected Animator _animator;
     protected IDungeonRoom _room;
     protected GameObject _player;
     protected Rigidbody _rigidbody;
@@ -30,35 +19,10 @@ public class EnemyController : CharacterController<EnemyState>
     protected float _patrolCooldown;
     protected float _remainingHealth;
 
-    [SerializeField] public float ChaseRange = 10.0f;
-
-    [SerializeField] public float AttackRange = 1.0f;
-
-    [SerializeField] public float AttackCooldown = 3.0f;
-
-    [SerializeField] public float AttackDamage = 1.0f;
-
-    [SerializeField] public float Health = 1.0f;
-
-    [SerializeField] public float PatrolSpeed = 1.0f;
-
-    [SerializeField] public float PatrolCooldown = 5.0f;
-
-    [SerializeField] public float ChaseSpeed = 10.0f;
-
-    [SerializeField] public float TurnSpeed = 10.0f;
-
-    [SerializeField] public float Acceleration = 4.0f;
-
-    [SerializeField] public float Deceleration = 10.0f;
-
-    [SerializeField] public AudioClip HurtSound;
-
-    [SerializeField] public AudioClip DeathSound;
-    
 
     [SerializeField]
-    public EnemyAnimationModel animationConfig;
+
+    public EnemyConfig config;
 
     public Vector3 moveMotion = new Vector3(0, -9f, 0);
     public GameObject HpBarPrefab;
@@ -101,37 +65,8 @@ public class EnemyController : CharacterController<EnemyState>
     }
 
     private void OnEnable() {
-        switch(animationConfig.initType)
-        {
-            case InitType.SpawnAir:
-            case InitType.SpawnGround:
-            case InitType.SpawnGroundSkeletons:
-                ChangeState<EnemyPreSpawn>(ignoreSame: false);
-                break;
-            case InitType.InactiveFloor:
-            case InitType.InactiveStanding:
-                ChangeState<EnemyInactive>(ignoreSame: false);
-                break;
-            case InitType.Idle:
-                ChangeState<EnemyIdle>(ignoreSame: false);
-                break;
-        }
+        config.animationModel.SetInitialState(this);
     }
-
-
-    private void MakeHpBar() {
-        if (HpBarPrefab == null) 
-        {
-            throw new System.Exception("HpBarPrefab is null");
-        }
-        var canvas = GameObject.Find("Canvas");
-        _HpBarObj = Instantiate(HpBarPrefab, canvas.transform);
-        _HpBarObj.name = "HpBar_" + gameObject.name;
-        _HpBarObj.SetActive(false);
-        _hpBarManager = _HpBarObj.GetComponent<HPBarManager>();
-        Hp = maxHp;
-    }
-    
     protected override void OnHurt(Transform souceTransform, Vector3 repelVelocity, float repelTransitionTime)
     {
         ChangeState<EnemyHurt>(ignoreSame: false);
@@ -146,10 +81,7 @@ public class EnemyController : CharacterController<EnemyState>
     protected override void Update()
     {
         base.Update();
-        if(_navMeshAgent.enabled == false && characterController.enabled == true)
-        {
-            characterController.Move(moveMotion * Time.deltaTime);
-        }
+        UpdateMoveAnimation();
     }
 
     public void StopRepel()
@@ -185,20 +117,25 @@ public class EnemyController : CharacterController<EnemyState>
     {
         _navMeshAgent.SetDestination(target);
     }
+    public void UpdateMoveAnimation() {
+        Vector3 velocity = _navMeshAgent.velocity;
+        Vector3 localVelocity = transform.InverseTransformDirection(velocity);
+        model.SetFloat("SpeedX", localVelocity.x);
+        model.SetFloat("SpeedY", localVelocity.z);
+    }
 
     #endregion
 
     #region Attack
     public bool Attack()
     {
-        if (model.canSwitch == false) return false;
         for (int i = 0; i < SkillModels.Length; i++)
         {
-            if(SkillModels[i].canRelease)
+            if(SkillModels[i].Ready)
             {
                 CurrSkillData = SkillModels[i].skill;
                 model.StartAttack(CurrSkillData);
-                SkillModels[i].OnRelease();
+                SkillModels[i].OnRelease(); // refresh CD
                 return true;
             }
         }
@@ -208,6 +145,19 @@ public class EnemyController : CharacterController<EnemyState>
     #endregion
 
     #region HpBar
+    private void MakeHpBar() {
+        if (HpBarPrefab == null) 
+        {
+            throw new System.Exception("HpBarPrefab is null");
+        }
+        var canvas = GameObject.Find("Canvas");
+        _HpBarObj = Instantiate(HpBarPrefab, canvas.transform);
+        _HpBarObj.name = "HpBar_" + gameObject.name;
+        _HpBarObj.SetActive(false);
+        _hpBarManager = _HpBarObj.GetComponent<HPBarManager>();
+        Hp = maxHp;
+    }
+    
     public void showHpBar()
     {
         _HpBarObj?.SetActive(true);

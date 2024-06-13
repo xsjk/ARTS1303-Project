@@ -6,8 +6,8 @@ public class EnemyInactive : EnemyStateBase
 {
     public override void OnEnter()
     {
-        Debug.Log("EnemyInactive Enter" + " " + enemy.animationConfig.initType);
-        switch (enemy.animationConfig.initType)
+        Debug.Log("EnemyInactive Enter" + " " + enemy.config.animationModel.initType);
+        switch (enemy.config.animationModel.initType)
         {
             case InitType.InactiveFloor:
                 model.PlayAnimation("Skeleton_Inactive_Floor_Pose");
@@ -25,6 +25,10 @@ public class EnemyInactive : EnemyStateBase
 
     public override void OnUpdate()
     {
+        if (ShouldWakeUp())
+        {
+            enemy.ChangeState<EnemyAwaken>();
+        }
         
     }
 }

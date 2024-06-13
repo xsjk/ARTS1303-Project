@@ -28,20 +28,6 @@ public abstract class CharacterController<T> : FSMController<T>
         gameObject.AddComponent<HurtEnter>().action = Hurt;
     }
 
-    protected override void Update()
-    {
-        base.Update();
-        UpdateSkillCD();
-    }
-
-    private void UpdateSkillCD()
-    {
-        for (int i = 0; i < SkillModels.Length; i++)
-        {
-            SkillModels[i].Update();
-        }
-    }
-
     public void Hurt(float hardTime, Transform souceTransform, Vector3 repelVelocity, float repelTransitionTime, float damgeValue)
     {
         if (isDead) return;

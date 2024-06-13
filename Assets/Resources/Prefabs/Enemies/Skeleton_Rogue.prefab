@@ -257,7 +257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ViewRange: 20
-  AttackRange: 1.5
+  AttackRange: 2
   AttackCooldown: 3
   AttackDamage: 1
   Health: 1

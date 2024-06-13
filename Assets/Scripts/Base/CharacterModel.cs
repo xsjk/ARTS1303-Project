@@ -15,16 +15,15 @@ public abstract class CharacterModel<T> : CharacterModel
 {
     private CharacterController<T> character;
     protected Animator animator;
-    public WeaponLogic[] WeaponLogics;
+    public WeaponLogic[] weaponLogics;
     protected SkillConfig skillData;
-    public bool canSwitch { get; protected set; } = true;
     public virtual void Init(CharacterController<T> character)
     {
         this.character = character;
         animator = GetComponent<Animator>();
-        for (int i = 0; i < WeaponLogics.Length; i++)
+        for (int i = 0; i < weaponLogics.Length; i++)
         {
-            WeaponLogics[i].Init(this);
+            weaponLogics[i].Init(this);
         }
     }
     public override void PlayAudio(AudioClip audioClip)
@@ -32,17 +31,28 @@ public abstract class CharacterModel<T> : CharacterModel
         character.PlayAudio(audioClip);
     }
 
-    private int weaponIndex;
+    private int _weaponIndex;
     public int currHitIndex;
     public void StartAttack(SkillConfig conf)
     {
         currHitIndex = 0;
         skillData = conf;
-        canSwitch = false;
-        animator.SetTrigger(skillData.triggerName);
+        SetTrigger(skillData.triggerName);
         Spawn(skillData.releaseConfig.spawn);
         PlayAudio(skillData.releaseConfig.sound);
     }
+    
+    private void EndAttack(string skillName)
+    {
+        if (skillName == skillData.name)
+        {
+            Spawn(skillData.endConfig.spawn);
+            animator.SetTrigger(skillData.overTriggerName);
+            currHitIndex = 0;
+        }
+        OnSkillOver();
+    }
+
 
     public override void Spawn(SpawnConfig spawn)
     {
@@ -63,7 +73,7 @@ public abstract class CharacterModel<T> : CharacterModel
         PlayAudio(spawn.sound);
     }
 
-    private int currHurtAnimationIndex = 1;
+    private int _currHurtAnimationIndex = 1;
     public void PlayHurtAnimtion(bool isFloat = true)
     {
         if (skillData != null)
@@ -74,9 +84,9 @@ public abstract class CharacterModel<T> : CharacterModel
         {
             animator.SetTrigger("Knock");
         }
-        animator.SetTrigger("Hurt " + currHurtAnimationIndex);
-        if (currHurtAnimationIndex == 1) currHurtAnimationIndex = 2;
-        else currHurtAnimationIndex = 1;
+        animator.SetTrigger("Hurt " + _currHurtAnimationIndex);
+        if (_currHurtAnimationIndex == 1) _currHurtAnimationIndex = 2;
+        else _currHurtAnimationIndex = 1;
     }
 
     public void StopHurtAnimtion()
@@ -105,15 +115,29 @@ public abstract class CharacterModel<T> : CharacterModel
     }
 
 
-    public void SetAnimation(string name, bool bl)
+    public void SetBool(string name, bool bl)
     {
         animator.SetBool(name, bl);
     }
 
+    public void SetTrigger(string name)
+    {
+        animator.SetTrigger(name);
+    }
+
+    public void SetFloat(string name, float value)
+    {
+        animator.SetFloat(name, value);
+    }
+
+    public int GetCurrentAnimationTag() {
+        return animator.GetCurrentAnimatorStateInfo(0).tagHash;
+    }
+
     public void ResetWeapon()
     {
-        for (int i = 0; i < WeaponLogics.Length; i++)
-            WeaponLogics[i].StopSkillHit();
+        for (int i = 0; i < weaponLogics.Length; i++)
+            weaponLogics[i].StopSkillHit();
     }
 
     #region Animation Events
@@ -122,7 +146,7 @@ public abstract class CharacterModel<T> : CharacterModel
     {
         if (currHitIndex < skillData.hitConfigs.Length)
         {
-            WeaponLogics[weaponIndex].StartSkillHit(skillData.hitConfigs[currHitIndex]);
+            weaponLogics[_weaponIndex].StartSkillHit(skillData.hitConfigs[currHitIndex]);
             PlayAudio(skillData.hitConfigs[currHitIndex].sound);
             currHitIndex++;
         }
@@ -130,27 +154,13 @@ public abstract class CharacterModel<T> : CharacterModel
     // Stop Skill Damage
     private void DeactivateSkillHit()
     {
-        WeaponLogics[weaponIndex].StopSkillHit();
+        weaponLogics[_weaponIndex].StopSkillHit();
     }
-
-    // private void SkillOver(string skillName)
-    // {
-    //     if (skillName == skillData.name)
-    //     {
-    //         SpawnObject(skillData.endModel.spawn);
-    //         canSwitch = true;
-    //         animator.SetTrigger(skillData.overTriggerName);
-    //         currHitIndex = 0;
-    //     }
-    //     OnSkillOver();
-    // }
-
     protected abstract void OnSkillOver();
 
 
     public void SkillCanSwitch()
     {
-        canSwitch = true;
     }
 
     public void CharacterMoveForAttack(int index)

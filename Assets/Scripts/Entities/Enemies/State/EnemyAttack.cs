@@ -21,5 +21,9 @@ public class EnemyAttack : EnemyStateBase
         {
             enemy.ChangeState<EnemyChase>();
         }
+        else if (InIdleAnimation())
+        {
+            enemy.Attack();
+        }
     }
 }
