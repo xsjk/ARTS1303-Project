@@ -31,7 +31,6 @@ public class EnemyController : CharacterController<EnemyState>
     private NavMeshAgent _navMeshAgent;
 
 
-
     public override float Hp { 
         get => hp; 
         set 

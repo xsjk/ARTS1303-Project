@@ -83,11 +83,10 @@ public abstract class CharacterModel<T> : CharacterModel
     private IEnumerator _SpawnObject(SpawnConfig spawn)
     {
         yield return new WaitForSeconds(spawn.delayTime);
-        var temp = Instantiate(spawn.prefab);
-        temp.transform.position = transform.position;
-        temp.transform.eulerAngles = transform.eulerAngles;
-        temp.transform.Translate(spawn.offset, Space.Self);
-        temp.transform.eulerAngles += spawn.rotation;
+        Vector3 spawnPosition = transform.position + spawn.offset;
+        Quaternion spawnQuaternion = Quaternion.Euler(spawn.rotation);
+
+        var temp = Instantiate(spawn.prefab, spawnPosition, spawnQuaternion);
         PlayAudio(spawn.sound);
     }
 
