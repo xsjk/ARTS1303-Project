@@ -2489,7 +2489,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: 'Walk_B '
+  - m_Name: Walk_B
     m_Type: 1
     m_DefaultFloat: 1
     m_DefaultInt: 0
@@ -4279,7 +4279,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: 'Walk_B '
+    m_DirectBlendParameter: Walk_B
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 455867200774271528, guid: 01b0f8098bb4f4ffe815c733080825d1, type: 3}

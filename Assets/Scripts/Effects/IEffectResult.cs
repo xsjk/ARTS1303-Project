@@ -98,6 +98,11 @@ namespace Effects
             _effects = effects;
         }
 
+        public CombinedEffectResult(params IEffectResult[] effects)
+        {
+            _effects = new List<IEffectResult>(effects);
+        }
+
         public Attributes ApplyAdditionEffect(Attributes attributes)
         {
             Attributes result = Attributes.Zero;

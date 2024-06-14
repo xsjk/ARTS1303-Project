@@ -111,12 +111,6 @@ public class EnemyAnimationModel
         animator.SetFloat("Run_A", Run_A);
         animator.SetFloat("Run_B", Run_B);
         animator.SetFloat("Run_C", Run_C);
-
-        // for (int i = 0; i < animator.parameterCount; i++)
-        // {
-        //     if (animator.parameters[i].type == AnimatorControllerParameterType.Float)
-        //     Debug.Log(animator.parameters[i].name + "=" + animator.GetFloat(animator.parameters[i].name));
-        // }
     }
     
 }

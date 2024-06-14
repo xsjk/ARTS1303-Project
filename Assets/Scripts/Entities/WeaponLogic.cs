@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Effects;
 
 [RequireComponent(typeof(BoxCollider))]
 public class WeaponLogic : MonoBehaviour
@@ -51,7 +52,7 @@ public class WeaponLogic : MonoBehaviour
         {
             targetList.Add(other.gameObject);
             // Apply real damage
-            other.GetComponent<DamageHandler>().Take(hitModel.hardTime, model.transform, hitModel.repelVelocity, hitModel.repelTransitionTime, hitModel.damageValue);
+            other.GetComponent<DamageHandler>().Take(hitModel.hardTime, model.transform, hitModel.repelVelocity, hitModel.repelTransitionTime, hitModel.effectResult);
             if (hitModel.hitEffect != null)
             {
                 // Apply hit effect

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Effects;
 using System;
 
 [CreateAssetMenu(fileName ="Skill Configuration", menuName ="Config/Skill Config")]
@@ -43,7 +44,15 @@ public class SkillReleaseConfig
 public class WeaponConfig
 {
     public string weaponName;
-    public float damageValue;
+    
+    [Header("Effect Config")]
+    public Attributes addtionEffect;
+    public Attributes percentageEffect;
+    public CombinedEffectResult effectResult => new CombinedEffectResult(
+        new AdditionEffectResult(addtionEffect),
+        new PercentageEffectResult(percentageEffect)
+    );
+
     public float hardTime;
     public Vector3 repelVelocity;
     public float repelTransitionTime;

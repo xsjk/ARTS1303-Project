@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using Effects;
 
 [CreateAssetMenu(fileName = "Hit Effect Configuration", menuName = "Config/Hit Effect")]
 public class HitEffect : ScriptableObject

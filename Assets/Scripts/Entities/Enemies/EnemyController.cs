@@ -31,17 +31,6 @@ public class EnemyController : CharacterController<EnemyState>
     private NavMeshAgent _navMeshAgent;
 
 
-    public override float Hp { 
-        get => hp; 
-        set 
-        {
-            hp = value;
-            if (hp <= 0)
-                hp = 0;
-            if (_hpBarManager != null)
-                _hpBarManager.percent = hp / (float)maxHp;
-        }
-    }
 
     public void SetRoom(IDungeonRoom room) {
         _room = room;
@@ -51,8 +40,6 @@ public class EnemyController : CharacterController<EnemyState>
     {
         base.Awake();
         _navMeshAgent = GetComponent<NavMeshAgent>();
-
-        Hp = maxHp;
 
         // If _hpBarManager is set, bind the HpBarFollowTarget to it.
         if (_hpBarManager != null) {
@@ -142,8 +129,6 @@ public class EnemyController : CharacterController<EnemyState>
         return false;
     }
 
-
-
     #endregion
 
     #region HpBar
@@ -157,7 +142,6 @@ public class EnemyController : CharacterController<EnemyState>
         _HpBarObj.name = "HpBar_" + gameObject.name;
         _HpBarObj.SetActive(false);
         _hpBarManager = _HpBarObj.GetComponent<HPBarManager>();
-        Hp = maxHp;
     }
     
     public void showHpBar()

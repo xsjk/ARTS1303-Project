@@ -1,4 +1,5 @@
 using System;
+using Effects;
 using UnityEngine;
 
 public class PlayerLogic : MonoBehaviour
@@ -46,8 +47,8 @@ public class PlayerLogic : MonoBehaviour
     }
 
     
-    public void Hurt(float hardTime, Transform souceTransform, Vector3 repelVelocity, float repelTransitionTime, float damgeValue)
+    public void Hurt(float hardTime, Transform souceTransform, Vector3 repelVelocity, float repelTransitionTime, IEffectResult effectResult)
     {
-        Debug.Log("Player hurt " + "hardTime: " + hardTime + " repelVelocity: " + repelVelocity + " repelTransitionTime: " + repelTransitionTime + " damgeValue: " + damgeValue);
+        Debug.Log("Player hurt " + "hardTime: " + hardTime + " repelVelocity: " + repelVelocity + " repelTransitionTime: " + repelTransitionTime + " effectResult: " + effectResult);
     }
 }

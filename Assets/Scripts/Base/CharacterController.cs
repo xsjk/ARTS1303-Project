@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Effects;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -9,17 +10,16 @@ public abstract class CharacterController<T> : FSMController<T>
     public CharacterController characterController { get; protected set; } // only used for characterMoveModels
     public CharacterModel<T> model { get; protected set; }
 
-    public float maxHp = 1;
-    protected float hp;
+    private Attributes attributes;
+
     public bool isDead = false;
-    public abstract float Hp { get; set; }
 
     public SkillModel[] SkillModels;
 
 
     protected virtual void Awake()
     {
-        hp = maxHp;
+        attributes.Health = attributes.MaxHealth;
         model = transform.GetComponent<CharacterModel<T>>();
         if (model == null)
             throw new Exception("CharacterModel is not found in " + name);
@@ -28,11 +28,12 @@ public abstract class CharacterController<T> : FSMController<T>
         gameObject.AddComponent<DamageHandler>().action = Hurt;
     }
 
-    public void Hurt(float hardTime, Transform souceTransform, Vector3 repelVelocity, float repelTransitionTime, float damgeValue)
+    public void Hurt(float hardTime, Transform souceTransform, Vector3 repelVelocity, float repelTransitionTime, IEffectResult effectResult)
     {
+        Debug.Log(name + " hurt " + effectResult);
         if (isDead) return;
-        Hp -= damgeValue;
-        if (Hp <= 0)
+        attributes = attributes.ApplyEffect(effectResult);
+        if (attributes.Health <= 0)
         {
             Dead();
         }
@@ -67,7 +68,6 @@ public abstract class CharacterController<T> : FSMController<T>
     }
     protected abstract void OnDead();
 
-
     public void CharacterAttackMove(Vector3 target, float time)
     {
         StartCoroutine(DoCharacterAttackMove(transform.TransformDirection(target), time));
@@ -93,8 +93,6 @@ public abstract class CharacterController<T> : FSMController<T>
             return;
         GetComponent<AudioSource>().PlayOneShot(audioClip);
     }
-
-
 
 
 }

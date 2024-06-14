@@ -6,7 +6,6 @@ public enum EnemyState
     EnemyInactive,
     EnemyAwaken,
     EnemyIdle,
-    EnemyMove,
     EnemyChase,
     EnemyAttack,
     EnemyHurt,

@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 
 namespace Effects
 {
+    [Serializable]
     public struct Attributes
     {
         public float Speed;
@@ -41,7 +43,7 @@ namespace Effects
                 MaxHealth = a.MaxHealth + b.MaxHealth
             };
         }
-        
+
         public static Attributes operator *(Attributes a, Attributes b)
         {
             return new Attributes
@@ -57,14 +59,18 @@ namespace Effects
             };
         }
 
-        public Attributes ApplyEffects(List<IEffectResult> effectResults)
+        public Attributes ApplyEffect(IEffectResult er)
         {
-            var er = new CombinedEffectResult(effectResults);
             var result = this;
             result += er.ApplyAdditionEffect(result);
             result *= er.ApplyPercentageEffect(result);
             result = er.ApplyMinMaxEffect(result);
             return result;
+        }
+        
+        public Attributes ApplyEffects(List<IEffectResult> effectResults)
+        {
+            return ApplyEffect(new CombinedEffectResult(effectResults));
         }
     }
 }
