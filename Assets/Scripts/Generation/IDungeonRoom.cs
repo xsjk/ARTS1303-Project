@@ -37,10 +37,6 @@ public interface IDungeonRoom
     // Place the Room at the given position
     public void Place(Vector2 position);
 
-    public void DecreaseEnemyCount();
-
-    public bool RoomCleared();
-
     public Dictionary<WallOrientation, int> GetAvailableOrientation();
 
     public GameObject PopWall(WallOrientation wo);

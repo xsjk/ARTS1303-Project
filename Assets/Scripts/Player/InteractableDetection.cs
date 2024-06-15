@@ -105,7 +105,7 @@ namespace Player
         private readonly Collider[] _colliders = new Collider[8];
         private UIDocument _uiDocument;
         private InteractableRender _interactableRender;
-        private Inventory _playerInventory;
+        private PlayerComponents _playerComponents;
 
 
         public float detectionRadius = 2.0f;
@@ -118,7 +118,7 @@ namespace Player
         public void Start()
         {
             _uiDocument = hud.GetComponent<UIDocument>();
-            _playerInventory = GetComponent<Inventory>();
+            _playerComponents = new PlayerComponents(gameObject);
             _interactableRender = new InteractableRender(_uiDocument.rootVisualElement.Q<ListView>("Interaction"), interactableActionTemplate);
         }
 
@@ -133,7 +133,7 @@ namespace Player
             {
                 if (action.Key != activeKey) continue;
                 if (action.Disabled) continue;
-                _activeInteractable.Interact(action.Key, _playerInventory);
+                _activeInteractable.Interact(action.Key, _playerComponents);
                 return;
             }
         }
@@ -165,14 +165,14 @@ namespace Player
                 .First();
             if (c.gameObject == _activeGameObject)
             {
-                _availableActions = _activeInteractable.AvailableInteractions();
+                _availableActions = _activeInteractable.AvailableInteractions(_playerComponents);
                 _interactableRender.SetActions(_availableActions, false);
                 return;
             }
 
             _activeGameObject = c.gameObject;
             _activeInteractable = _activeGameObject.GetComponent<IInteractable>();
-            _availableActions = _activeInteractable.AvailableInteractions();
+            _availableActions = _activeInteractable.AvailableInteractions(_playerComponents);
             _interactableRender.SetActions(_availableActions, true);
         }
 

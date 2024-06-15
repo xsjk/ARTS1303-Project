@@ -10,9 +10,13 @@ public class Spawner : MonoBehaviour
     void Start()
     {
         _rooms = new List<IDungeonRoom>();
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 5; i++)
         {
-            _rooms.Add(new EmptyDungeonRoom());
+            _rooms.Add(new ShopDungeonRoom());
+        }
+        for (int i = 0; i < 5; i++)
+        {
+            _rooms.Add(new TreasureDungeonRoom());
         }
 
         var placement = new DungeonPlacement();

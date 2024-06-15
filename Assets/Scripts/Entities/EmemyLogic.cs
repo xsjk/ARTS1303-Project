@@ -4,7 +4,7 @@ using UnityEngine;
 public class EmemyLogic : MonoBehaviour
 {
     private Animator _animator;
-    private IDungeonRoom _room;
+    private TriggerableDungeonRoom _room;
     private GameObject _player;
     private Rigidbody _rigidbody;
     private AudioSource _audioSource;
@@ -47,7 +47,7 @@ public class EmemyLogic : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
     }
 
-    public void SetRoom(IDungeonRoom room)
+    public void SetRoom(TriggerableDungeonRoom room)
     {
         _room = room;
     }
@@ -135,7 +135,7 @@ public class EmemyLogic : MonoBehaviour
 
         _audioSource.PlayOneShot(DeathSound);
         _animator.SetBool("Alive", false);
-        _room.DecreaseEnemyCount();
+        _room.DecreaseMobCount();
         GetComponent<CapsuleCollider>().enabled = false;
     }
 }

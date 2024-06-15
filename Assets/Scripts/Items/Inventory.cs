@@ -34,12 +34,12 @@ namespace Items
     public class Inventory : MonoBehaviour, IItem
     {
         private readonly InventoryState _state = new();
+        
+        public int Coins => _state.PickupCounts[Pickups.Coin];
 
         public void AddItem(IItem item)
         {
             item.OnEnterInventory(_state);
         }
-
-        public GameObject Prefab { get; } = null;
     }
 }

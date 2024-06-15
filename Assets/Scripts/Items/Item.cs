@@ -22,6 +22,7 @@ namespace Items
 
         public void OnSecondaryInteract()
         {
+            
         }
     }
 
@@ -34,5 +35,9 @@ namespace Items
         public GameObject Prefab { get; }
         
         public string Name { get; }
+        
+        // The cost of the item in the shop
+        // 0 if the item is not buyable
+        public int Cost { get; }
     }
 }

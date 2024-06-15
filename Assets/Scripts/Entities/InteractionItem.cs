@@ -1,4 +1,4 @@
-using Items;
+using Player;
 
 namespace Entities
 {
@@ -16,8 +16,8 @@ namespace Entities
 
     public interface IInteractable
     {
-        public InteractableAction[] AvailableInteractions();
+        public InteractableAction[] AvailableInteractions(PlayerComponents playerComponents);
 
-        public void Interact(KeyBinding key, Inventory playerInventory);
+        public void Interact(KeyBinding key, PlayerComponents playerComponents);
     }
 }

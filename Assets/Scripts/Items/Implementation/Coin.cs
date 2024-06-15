@@ -33,9 +33,10 @@ namespace Items.Implementation
 
     public class Coin : IInstantiableItem
     {
-        public GameObject Prefab { get; } = Resources.Load<GameObject>("Prefabs/coin");
+        public GameObject Prefab { get; } = Resources.Load<GameObject>("Prefabs/Coin");
 
         public string Name { get; } = "1 coin";
+        public int Cost { get; } = 0;
 
         public IEffect ProduceEffect()
         {
