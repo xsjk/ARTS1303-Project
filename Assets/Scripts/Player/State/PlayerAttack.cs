@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAwaken : EnemyStateBase
+public class PlayerAttack : PlayerStateBase
 {
     public override void OnEnter()
     {
-        Debug.Log("EnemyAwaken Enter");
-        model.WakeUp();
+        Debug.Log("PlayerAttack Enter");
+        
     }
 
     public override void OnExit()
@@ -17,9 +17,6 @@ public class EnemyAwaken : EnemyStateBase
 
     public override void OnUpdate()
     {
-        if (model.InAnimation(AnimationType.Idle))
-        {
-            enemy.ChangeState<EnemyIdle>();
-        }
+        
     }
 }

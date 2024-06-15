@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using InitType = EnemyAnimationModel.InitType;
+using InitType = EnemyModel.InitType;
 
 public class EnemySpawn : EnemyStateBase
 {
     public override void OnEnter()
     {
-        Debug.Log("EnemySpawn Enter" + " " + enemy.config.animationModel.initType);
-        switch (enemy.config.animationModel.initType)
+        Debug.Log("EnemySpawn Enter" + " " + enemy.model.initType);
+        switch (enemy.model.initType)
         {
             case InitType.SpawnAir:
                 model.PlayAnimation("Spawn_Air");
@@ -28,7 +28,7 @@ public class EnemySpawn : EnemyStateBase
 
     public override void OnUpdate()
     {
-        if (InIdleAnimation())
+        if (model.InAnimation(AnimationType.Idle))
         {
             enemy.ChangeState<EnemyIdle>();
         }

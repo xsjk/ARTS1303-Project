@@ -10,7 +10,6 @@ public class EnemyRoom1 : EmptyDungeonRoom
     {
         var enemy = EnemyManager.Spawn(EnemyType.Skeleton_Minion, _room.transform);
         enemy.transform.localPosition = new Vector3(position.x, 0, position.y);
-        enemy.GetComponent<EnemyLogic>().SetRoom(this);
         enemy.GetComponent<EnemyController>().SetRoom(this);
         return enemy;
     }

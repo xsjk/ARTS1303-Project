@@ -36,12 +36,12 @@ public class EnemyAttack : EnemyStateBase
         {
             enemy.ChangeState<EnemyChase>();
         }
-        else if (!isAttack && InIdleAnimation())
+        else if (!isAttack && model.InAnimation(AnimationType.Idle))
         {
             Debug.Log("Attack");
             isAttack = enemy.Attack();
         }
-        else if (InAttackAnimation())
+        else if (model.InAnimation(AnimationType.Attack))
         {
             isAttack = false;
         }

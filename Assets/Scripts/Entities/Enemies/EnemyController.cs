@@ -4,10 +4,9 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using InitType = EnemyAnimationModel.InitType;
-
 
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(CharacterModel))]
 public class EnemyController : CharacterController<EnemyState>
 {
    
@@ -19,10 +18,7 @@ public class EnemyController : CharacterController<EnemyState>
     protected float _patrolCooldown;
     protected float _remainingHealth;
 
-
-    [SerializeField]
-
-    public EnemyConfig config;
+    [SerializeField] public EnemyConfig config; // rest configs are in CharacterController attributes
 
     public Vector3 moveMotion = new Vector3(0, -9f, 0);
     public GameObject HpBarPrefab;
@@ -30,6 +26,7 @@ public class EnemyController : CharacterController<EnemyState>
     private GameObject _HpBarObj;
     private NavMeshAgent _navMeshAgent;
 
+    public new EnemyModel model => base.model as EnemyModel;
 
 
     public void SetRoom(IDungeonRoom room) {
@@ -50,8 +47,12 @@ public class EnemyController : CharacterController<EnemyState>
         }
     }
 
+    void SetInitialState() {
+        model.SetInitialState(this);
+    }
+
     private void OnEnable() {
-        config.animationModel.SetInitialState(this);
+        SetInitialState();
     }
     protected override void OnHurt(Transform souceTransform, Vector3 repelVelocity, float repelTransitionTime)
     {
@@ -62,12 +63,6 @@ public class EnemyController : CharacterController<EnemyState>
     protected override void OnHurtOver()
     {
         ChangeState<EnemyIdle>(ignoreSame: false);
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-        UpdateMoveAnimation();
     }
 
     public void StopRepel()
@@ -103,11 +98,10 @@ public class EnemyController : CharacterController<EnemyState>
     {
         _navMeshAgent.SetDestination(target);
     }
-    public void UpdateMoveAnimation() {
+    protected override void UpdateMoveAnimation() {
         Vector3 velocity = _navMeshAgent.velocity;
         Vector3 localVelocity = transform.InverseTransformDirection(velocity);
-        model.SetFloat("SpeedX", localVelocity.x);
-        model.SetFloat("SpeedY", localVelocity.z);
+        model.SetMoveVelocity(new Vector2(localVelocity.x, localVelocity.z));
     }
 
     #endregion

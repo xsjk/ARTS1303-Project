@@ -1,8 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using InitType = EnemyAnimationModel.InitType;
-
 public class EnemyPreSpawn : EnemyStateBase
 {
     public override void OnEnter()

@@ -38,6 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -807,25 +808,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38cb3de9acf046b19385e678f25c345, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 12
   acceleration: 2
   directionControl: 2
   attackCooldown: 1
---- !u!114 &948132535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 948132529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad68d249f898461f9ecd8dcf0f75786d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackRange: 1.5
-  AttackSound: {fileID: 8300000, guid: 97ad7a5379f4b4131a2df95a06accc21, type: 3}
-  HurtSound: {fileID: 8300000, guid: c3162a8ac529741d1af3c467ca6c799d, type: 3}
 --- !u!114 &948132536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -879,38 +864,102 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
---- !u!54 &948132538
-Rigidbody:
+--- !u!4 &948132540 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 66c517262c4f34367beaa8b4d9f1f6a6, type: 3}
+  m_PrefabInstance: {fileID: 990353284}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &948132542
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 948132529}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 758ec93291dc5bb4486915639d6c0775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curState: 0
+  attributes:
+    Speed: 10
+    AttackDamage: 0
+    AttackSpeed: 0
+    AttackRange: 0
+    BulletSpeed: 0
+    Luck: 0
+    Health: 0
+    MaxHealth: 0
+  isDead: 0
+  SkillModels: []
+  AttackSound: {fileID: 0}
+  HurtSound: {fileID: 0}
+  config:
+    ChaseRange: 10
+    AttackRange: 1
+    AttackCooldown: 3
+    AttackDamage: 1
+    Health: 1
+    PatrolSpeed: 1
+    PatrolCooldown: 5
+    ChaseSpeed: 10
+    TurnSpeed: 10
+    Acceleration: 4
+    Deceleration: 10
+    HurtSound: {fileID: 0}
+    DeathSound: {fileID: 0}
+--- !u!143 &948132543
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 948132529}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
---- !u!4 &948132540 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 66c517262c4f34367beaa8b4d9f1f6a6, type: 3}
-  m_PrefabInstance: {fileID: 990353284}
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &948132544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 948132529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6ae1d91be4bdc3448d24f448399168b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  config:
+    Idle_Default: 1
+    Idle_Tired: 0
+    Idle_Combat: 0
+    Idle_Unarmed: 0
+    Idle_2H_Melee: 0
+    Walk_A: 0
+    Walk_B: 1
+    Walk_C: 0
+    Walk_D: 0
+    Run_A: 0
+    Run_B: 0
+    Run_C: 1
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1077,12 +1126,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    m_Quality: 3
-    m_FrameInfluence: 0.1
-    m_JitterScale: 1
-    m_MipBias: 0
-    m_VarianceClampScale: 0.9
-    m_ContrastAdaptiveSharpening: 0
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
 --- !u!1001 &990353284
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1348,9 +1397,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 66c517262c4f34367beaa8b4d9f1f6a6, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 66c517262c4f34367beaa8b4d9f1f6a6, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 27d940c3e2c505041b7a1edccef86db3, type: 2}
+      objectReference: {fileID: 9100000, guid: ee8f28bfe53eb804c93e563e51187aab, type: 2}
     - target: {fileID: 5866666021909216657, guid: 66c517262c4f34367beaa8b4d9f1f6a6, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0
@@ -1388,16 +1441,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 66c517262c4f34367beaa8b4d9f1f6a6, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 948132538}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 66c517262c4f34367beaa8b4d9f1f6a6, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 948132537}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 66c517262c4f34367beaa8b4d9f1f6a6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 948132536}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 66c517262c4f34367beaa8b4d9f1f6a6, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 948132535}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 66c517262c4f34367beaa8b4d9f1f6a6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 948132534}
@@ -1413,6 +1460,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 66c517262c4f34367beaa8b4d9f1f6a6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 948132530}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 66c517262c4f34367beaa8b4d9f1f6a6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 948132543}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 66c517262c4f34367beaa8b4d9f1f6a6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 948132542}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 66c517262c4f34367beaa8b4d9f1f6a6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 948132544}
   m_SourcePrefab: {fileID: 100100000, guid: 66c517262c4f34367beaa8b4d9f1f6a6, type: 3}
 --- !u!1 &1315391949
 GameObject:

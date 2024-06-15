@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class EnemyConfig
+public class PlayerConfig
 {
 
     [Header("Base Config")]

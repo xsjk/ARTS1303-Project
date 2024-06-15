@@ -1,21 +1,18 @@
-using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputLogic : MonoBehaviour
 {
-    private Rigidbody _rigidbody;
-    private Animator _animator;
     private Vector2 _move;
-    private PlayerLogic _playerLogic;
+    private PlayerController controller;
 
-    public float maxSpeed = 12.0f; // how fast we run forward
+    public float maxSpeed => controller.attributes.Speed;
     public float acceleration = 2.0f; // how fast we can accelerate
     public float directionControl = 2.0f; // how fast we can change direction
     public float attackCooldown = 1f; // how long we have to wait between attacks
     private float _speedXZ; // our current speed
     private float _attackCooldown; // how long we have to wait before we can attack again
-
+    private Vector3 _velocity;
 
     public void OnMove(InputValue value)
     {
@@ -27,8 +24,7 @@ public class InputLogic : MonoBehaviour
         if (_attackCooldown <= 0)
         {
             _attackCooldown = attackCooldown;
-            _animator.SetTrigger("IsFiring");
-            _playerLogic.DealDamageToEnemy();
+            controller.ChangeState<PlayerAttack>(ignoreSame: false);
         }
     }
 
@@ -56,46 +52,38 @@ public class InputLogic : MonoBehaviour
     private void Move(float deltaTime)
     {
         var trans = transform;
-        var rigidbodyVelocity = _rigidbody.velocity;
         // find the direction to move in, based on the direction inputs
         Vector3 velocityDirection = trans.forward * _move.y + trans.right * _move.x;
 
         // if we are no longer pressing and input, carry on moving in the last direction we were set to move in
         if (_move == Vector2.zero)
-            velocityDirection = rigidbodyVelocity;
+            velocityDirection = _velocity;
 
         velocityDirection.y = 0;
         velocityDirection = velocityDirection.normalized;
 
-        // apply adjustment to acceleration
-        float localAcceleration = directionControl;
-
         // apply the speed along the XZ plane to the direction
-        var velocity = velocityDirection * _speedXZ;
-        velocity.y = rigidbodyVelocity.y;
+        _velocity.x = velocityDirection.x * _speedXZ;
+        _velocity.z = velocityDirection.z * _speedXZ;
 
-        // apply the velocity to the rigidbody
-        _rigidbody.velocity = Vector3.Lerp(rigidbodyVelocity, velocity, deltaTime * localAcceleration);
-        var rigidbodyVelocityXZ = new Vector2(rigidbodyVelocity.x, rigidbodyVelocity.z).magnitude;
-        _animator.SetFloat("SpeedX", rigidbodyVelocityXZ / _speedXZ * 2);
-        _animator.SetFloat("SpeedZ", rigidbodyVelocityXZ / _speedXZ * 2);
-        // Debug.Log(_rigidbody.velocity);
-    }
+        // apply gravity
+        if (controller.model.IsGrounded()) 
+        {
+            _velocity.y = 0;
+        }
+        else
+        {
+            _velocity.y += Physics.gravity.y * deltaTime;
+        } 
 
-    private void UpdataAnimator()
-    {
-        _animator.SetFloat("Speed", _rigidbody.velocity.y);
-        _animator.SetFloat("Direction", _rigidbody.velocity.x);
-        // Debug.Log("speed " + _rigidbody.velocity.y);
-        // Debug.Log("direction " + _rigidbody.velocity.x);
+        // move the character controller
+        controller.model.Move(_velocity * deltaTime);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        _rigidbody = GetComponent<Rigidbody>();
-        _animator = GetComponent<Animator>();
-        _playerLogic = GetComponent<PlayerLogic>();
+        controller = GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
@@ -105,6 +93,5 @@ public class InputLogic : MonoBehaviour
         AlignRotation();
         LerpSpeed(Time.deltaTime);
         Move(Time.deltaTime);
-        UpdataAnimator();
     }
 }

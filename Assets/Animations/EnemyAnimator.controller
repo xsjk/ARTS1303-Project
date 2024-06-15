@@ -1814,7 +1814,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Hurt 1
+    m_ConditionEvent: Idle
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3275192472902818873}
@@ -2453,13 +2453,13 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Idle_Tired
+  - m_Name: Idle_Default
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Idle
+  - m_Name: Idle_Tired
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -2778,6 +2778,12 @@ AnimatorController:
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: Block_Attack
+    m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: Idle
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -4191,7 +4197,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Idle
+    m_DirectBlendParameter: Idle_Default
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 345275505875579249, guid: 01b0f8098bb4f4ffe815c733080825d1, type: 3}

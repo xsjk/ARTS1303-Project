@@ -46,8 +46,8 @@ public class WeaponConfig
     public string weaponName;
     
     [Header("Effect Config")]
-    public Attributes addtionEffect;
-    public Attributes percentageEffect;
+    public Attributes addtionEffect = Attributes.Zero;
+    public Attributes percentageEffect = Attributes.One;
     public CombinedEffectResult effectResult => new CombinedEffectResult(
         new AdditionEffectResult(addtionEffect),
         new PercentageEffectResult(percentageEffect)

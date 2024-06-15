@@ -9,8 +9,9 @@ public abstract class CharacterController<T> : FSMController<T>
 {
     public CharacterController characterController { get; protected set; } // only used for characterMoveModels
     public CharacterModel<T> model { get; protected set; }
-
-    private Attributes attributes;
+    
+    [SerializeField]
+    public Attributes attributes;
 
     public bool isDead = false;
 
@@ -23,7 +24,7 @@ public abstract class CharacterController<T> : FSMController<T>
         model = transform.GetComponent<CharacterModel<T>>();
         if (model == null)
             throw new Exception("CharacterModel is not found in " + name);
-        model.Init(this);
+        // model.Init(this);
         characterController = GetComponent<CharacterController>();
         gameObject.AddComponent<DamageHandler>().action = Hurt;
     }
@@ -68,31 +69,22 @@ public abstract class CharacterController<T> : FSMController<T>
     }
     protected abstract void OnDead();
 
-    public void CharacterAttackMove(Vector3 target, float time)
-    {
-        StartCoroutine(DoCharacterAttackMove(transform.TransformDirection(target), time));
-    }
-
-    protected IEnumerator DoCharacterAttackMove(Vector3 target, float time)
-    {
-        characterController.enabled = true;
-        float currTime = 0;
-        while (currTime < time)
-        {
-            Vector3 moveDir = target * Time.deltaTime / time;
-            characterController.Move(moveDir);
-            currTime += Time.deltaTime;
-            yield return null;
-        }
-        characterController.enabled = false;
-    }
 
     public void PlayAudio(AudioClip audioClip)
     {
         if (audioClip == null)
             return;
-        GetComponent<AudioSource>().PlayOneShot(audioClip);
+        model.PlayAudio(audioClip);
     }
 
+    protected override void Update() {
+        base.Update();
+        UpdateMoveAnimation();
+    }
+    
+    protected virtual void UpdateMoveAnimation() {
+        Vector3 localVelocity = characterController.velocity;
+        model.SetMoveVelocity(new Vector2(localVelocity.x, localVelocity.z));
+    }
 
 }

@@ -297,9 +297,6 @@ PrefabInstance:
       addedObject: {fileID: 4175606910069303463}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 18594c861de9a46238e967ee1f2bcbfd, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -1606438446312201865}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 18594c861de9a46238e967ee1f2bcbfd, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 6304323081244521471}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 18594c861de9a46238e967ee1f2bcbfd, type: 3}
       insertIndex: -1
@@ -483,31 +480,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &-1606438446312201865
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5249953262102364197}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8147aa42658a016499bb30bb48c99443, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ViewRange: 20
-  AttackRange: 5
-  AttackCooldown: 3
-  AttackDamage: 1
-  Health: 1
-  PatrolSpeed: 1
-  PatrolCooldown: 5
-  ChaseSpeed: 2
-  TurnSpeed: 10
-  Acceleration: 4
-  Deceleration: 10
-  HurtSound: {fileID: 8300000, guid: 97ad7a5379f4b4131a2df95a06accc21, type: 3}
-  DeathSound: {fileID: 8300000, guid: 486293b784472423ca9ae70a50610977, type: 3}
 --- !u!195 &6304323081244521471
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -569,7 +541,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curState: 0
-  maxHp: 1
+  attributes:
+    Speed: 0
+    AttackDamage: 0
+    AttackSpeed: 0
+    AttackRange: 0
+    BulletSpeed: 0
+    Luck: 0
+    Health: 0
+    MaxHealth: 0
   isDead: 0
   SkillModels:
   - skill: {fileID: 11400000, guid: 4c2d6335698f0e34b95ec869b93cc109, type: 2}
@@ -595,21 +575,6 @@ MonoBehaviour:
     Deceleration: 10
     HurtSound: {fileID: 8300000, guid: 5a702412428b34672b3af6b80c9a4811, type: 3}
     DeathSound: {fileID: 8300000, guid: 486293b784472423ca9ae70a50610977, type: 3}
-    animationModel:
-      initType: 2
-      awakeType: 0
-      Idle: 0
-      Idle_Tired: 0
-      Idle_Combat: 1
-      Idle_Unarmed: 0
-      Idle_2H_Melee: 0
-      Walk_A: 0
-      Walk_B: 1
-      Walk_C: 0
-      Walk_D: 0
-      Run_A: 0
-      Run_B: 1
-      Run_C: 0
   moveMotion: {x: 0, y: -9, z: 0}
   HpBarPrefab: {fileID: 0}
 --- !u!114 &2241453781711426216
@@ -624,6 +589,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59ad17eadb4ed6444bacaeb68ab05be6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  config:
+    Idle_Default: 0
+    Idle_Tired: 0
+    Idle_Combat: 0
+    Idle_Unarmed: 0
+    Idle_2H_Melee: 0
+    Walk_A: 0
+    Walk_B: 0
+    Walk_C: 0
+    Walk_D: 0
+    Run_A: 0
+    Run_B: 0
+    Run_C: 0
+  initType: 0
+  awakeType: 0
 --- !u!4 &5898059511335291162 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -7655872403321392018, guid: 18594c861de9a46238e967ee1f2bcbfd, type: 3}

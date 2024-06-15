@@ -2,77 +2,111 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class CharacterModel : MonoBehaviour
-{
-    public abstract void PlayAudio(AudioClip audioClip);
-    public abstract void Spawn(SpawnConfig spawn);
-}
-
-
 
 [RequireComponent(typeof(Animator))]
-public abstract class CharacterModel<T> : CharacterModel
+[RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(CharacterController))]
+
+public abstract class CharacterModel : MonoBehaviour
 {
-    private CharacterController<T> character;
-    protected Animator animator;
-    public Dictionary<string, WeaponLogic> weaponLogics = new Dictionary<string, WeaponLogic>();
-    protected SkillConfig curSkill;
+    [SerializeField]
+    public CharacterAnimationConfig config;
 
-    private void Awake() {
-        // find weapon names and weapon logics in children and add to the dictionary
-        foreach (var weapon in GetComponentsInChildren<WeaponLogic>()) {
-            weaponLogics.Add(weapon.name, weapon);
-            weapon.Init(this);
-            Debug.Log("Weapon name: " + weapon.name + " Weapon logic: " + weaponLogics[weapon.name]);
-        }
-    }
-
-
-    public virtual void Init(CharacterController<T> character)
+    private Animator animator;
+    private AudioSource audioSource;
+    private CharacterController characterController;
+    protected virtual void Awake()
     {
-        this.character = character;
+        audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
-    }
-    public override void PlayAudio(AudioClip audioClip)
-    {
-        character.PlayAudio(audioClip);
-    }
-
-
-    public void ActivateWeapons(SkillConfig conf)
-    {
-        foreach (var c in conf.weaponConfigs) {
-            if (weaponLogics.ContainsKey(c.weaponName))
-                weaponLogics[c.weaponName].Activate(c);
-            else
-                throw new System.Exception("Weapon name not found: " + c.weaponName);
-        }
-    }
-    public void DeactivateWeapons()
-    {
-        foreach (var weapon in weaponLogics)
-        {
-            weapon.Value.Deactivate();
-        }
-    }
-    public void TriggerSkill(SkillConfig conf)
-    {
-        SetTrigger(conf.triggerName);
-        Spawn(conf.releaseConfig.spawn);
-        PlayAudio(conf.releaseConfig.sound);
-        curSkill = conf;
+        characterController = GetComponent<CharacterController>();
+        config.InitAnimator(animator);
     }
     
-    public void FinalizeSkill()
+    #region Animator Control
+    public void SetBool(string name, bool bl)
     {
-        Spawn(curSkill.endConfig.spawn);
-        animator.SetTrigger(curSkill.overTriggerName);
-        OnSkillOver();
-        curSkill = null;
+        animator.SetBool(name, bl);
     }
 
+    public void SetTrigger(string name)
+    {
+        animator.SetTrigger(name);
+    }
 
-    public override void Spawn(SpawnConfig spawn)
+    public void SetFloat(string name, float value)
+    {
+        animator.SetFloat(name, value);
+    }
+    public void ResetTrigger(string name)
+    {
+        animator.ResetTrigger(name);
+    }
+
+    public void PlayAnimation(string name, int layer = 0, float normalizedTime = 0)
+    {
+        animator.Play(name, layer, normalizedTime);
+    }
+    
+    public void PauseAnimation()
+    {
+        animator.speed = 0;
+    }
+
+    public void ContinueAnimation()
+    {
+        animator.speed = 1;
+    }
+
+    public int GetCurrentAnimationTag() {
+        return animator.GetCurrentAnimatorStateInfo(0).tagHash;
+    }
+
+    #endregion
+
+    #region Audio Control
+    public virtual void PlayAudio(AudioClip audioClip)
+    {
+        if (audioClip != null)
+            audioSource.PlayOneShot(audioClip); 
+    }
+    #endregion
+
+    #region Movement Control
+    public void Move(Vector3 displacement)
+    {
+        characterController.Move(displacement);
+    }
+    public bool IsGrounded()
+    {
+        return characterController.isGrounded;
+    }
+    public void CharacterAttackMove(Vector3 target, float time)
+    {
+        StartCoroutine(DoCharacterAttackMove(transform.TransformDirection(target), time));
+    }
+
+    protected IEnumerator DoCharacterAttackMove(Vector3 target, float time)
+    {
+        characterController.enabled = true;
+        float currTime = 0;
+        while (currTime < time)
+        {
+            Vector3 moveDir = target * Time.deltaTime / time;
+            characterController.Move(moveDir);
+            currTime += Time.deltaTime;
+            yield return null;
+        }
+        characterController.enabled = false;
+    }
+    public void CharacterMoveForAttack(CharacterMoveModel model)
+    {
+        CharacterAttackMove(model.offset, model.duration);
+    }
+
+    #endregion
+
+    public virtual void Spawn(SpawnConfig spawn)
     {
         if (spawn != null && spawn.prefab != null)
         {
@@ -89,66 +123,116 @@ public abstract class CharacterModel<T> : CharacterModel
         var temp = Instantiate(spawn.prefab, spawnPosition, spawnQuaternion);
         PlayAudio(spawn.sound);
     }
+}
+
+
+public enum AnimationType
+{
+    Idle,
+    Attack,
+    Hurt,
+    Dead
+}
+
+
+public abstract class CharacterModel<T> : CharacterModel
+{
+    private CharacterController<T> character;
+    public Dictionary<string, WeaponLogic> weaponLogics = new Dictionary<string, WeaponLogic>();
+    protected SkillConfig curSkill;
+
+    protected override void Awake() {
+        base.Awake();
+        // find weapon names and weapon logics in children and add to the dictionary
+        foreach (var weapon in GetComponentsInChildren<WeaponLogic>()) {
+            weaponLogics.Add(weapon.name, weapon);
+            weapon.Init(this);
+            Debug.Log("Weapon name: " + weapon.name + " Weapon logic: " + weaponLogics[weapon.name]);
+        }
+    }
+
+    public virtual void Init(CharacterController<T> character)
+    {
+        this.character = character;
+    }
+
+    #region Skill and Weapon Control
+    public void ActivateWeapons(SkillConfig conf)
+    {
+        foreach (var c in conf.weaponConfigs) {
+            if (weaponLogics.ContainsKey(c.weaponName))
+                weaponLogics[c.weaponName].Activate(c);
+            else
+                throw new System.Exception("Weapon name not found: " + c.weaponName);
+        }
+    }
+    public void DeactivateWeapons()
+    {
+        foreach (var weapon in weaponLogics)
+        {
+            weapon.Value.Deactivate();
+        }
+    }
+    
+    public void TriggerSkill(SkillConfig conf)
+    {
+        SetTrigger(conf.triggerName);
+        Spawn(conf.releaseConfig.spawn);
+        PlayAudio(conf.releaseConfig.sound);
+        curSkill = conf;
+    }
+    
+    public void FinalizeSkill()
+    {
+        Spawn(curSkill.endConfig.spawn);
+        SetTrigger(curSkill.overTriggerName);
+        OnSkillOver();
+        curSkill = null;
+    }
+
+    #endregion
+
+
+    #region Animation Control
+
+    public void SetMoveVelocity(Vector2 speed)
+    {
+        SetFloat("SpeedX", speed.x);
+        SetFloat("SpeedY", speed.y);
+    }
+
+    public bool InAnimation(AnimationType type)
+    {
+        return GetCurrentAnimationTag() == Animator.StringToHash(type.ToString());
+    }
+
+    public void TriggerIdle() {
+        SetTrigger("Idle");
+    }
 
     private int _currHurtAnimationIndex = 1;
     public void PlayHurtAnimtion(bool isFloat = true)
     {
         if (curSkill != null)
         {
-            animator.ResetTrigger(curSkill.triggerName);
+            ResetTrigger(curSkill.triggerName);
         }
         if (isFloat)
         {
-            animator.SetTrigger("Knock");
+            SetTrigger("Knock");
         }
-        animator.SetTrigger("Hurt " + _currHurtAnimationIndex);
+        SetTrigger("Hurt " + _currHurtAnimationIndex);
         if (_currHurtAnimationIndex == 1) _currHurtAnimationIndex = 2;
         else _currHurtAnimationIndex = 1;
     }
 
     public void StopHurtAnimtion()
     {
-        animator.SetTrigger("HurtOver");
+        throw new System.Exception("StopHurtAnimtion is not implemented");
     }
-
-    public void PlayAnimation(string name, int layer = 0, float normalizedTime = 0)
-    {
-        animator.Play(name, layer, normalizedTime);
-    }
-
-    public void PauseAnimation()
-    {
-        animator.speed = 0;
-    }
-
-    public void ContinueAnimation()
-    {
-        animator.speed = 1;
-    }
-
     public void PlayDeadAnimation()
     {
-        animator.SetTrigger("Dead");
-    }
-
-
-    public void SetBool(string name, bool bl)
-    {
-        animator.SetBool(name, bl);
-    }
-
-    public void SetTrigger(string name)
-    {
-        animator.SetTrigger(name);
-    }
-
-    public void SetFloat(string name, float value)
-    {
-        animator.SetFloat(name, value);
-    }
-
-    public int GetCurrentAnimationTag() {
-        return animator.GetCurrentAnimatorStateInfo(0).tagHash;
+        SetTrigger("Dead");
     }
 
     public void ResetWeapon()
@@ -157,6 +241,8 @@ public abstract class CharacterModel<T> : CharacterModel
             weapon.Value.Deactivate();
     }
 
+    #endregion
+
     #region Animation Events
 
     protected abstract void OnSkillOver();
@@ -164,14 +250,6 @@ public abstract class CharacterModel<T> : CharacterModel
 
     public void SkillCanSwitch()
     {
-    }
-
-    public void CharacterMoveForAttack(int index)
-    {
-        if (index >= curSkill.characterMoveModels.Length)
-            Debug.LogError("index out of range" + index + " " + curSkill.characterMoveModels.Length);
-        CharacterMoveModel model = curSkill.characterMoveModels[index];
-        character.CharacterAttackMove(model.offset, model.duration);
     }
 
     public void SpawnObj(int index)

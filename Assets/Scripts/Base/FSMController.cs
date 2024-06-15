@@ -42,6 +42,5 @@ public abstract class FSMController<T> : MonoBehaviour
         if (state != null)
             state.OnUpdate();
     }
-
 }
 
