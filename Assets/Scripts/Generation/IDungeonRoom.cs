@@ -36,10 +36,8 @@ public interface IDungeonRoom
 
     // Place the Room at the given position
     public void Place(Vector2 position);
-
-    public void DecreaseEnemyCount();
-
-    public bool RoomCleared();
+    // Bake the Room
+    public void Bake();
 
     public Dictionary<WallOrientation, int> GetAvailableOrientation();
 

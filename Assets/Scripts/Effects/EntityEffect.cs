@@ -7,6 +7,7 @@ namespace Effects
     public class EntityEffect : MonoBehaviour
     {
         private Attributes _baseAttributes;
+        private CombinedEffectResult _combinedEffectResult;
 
         public Attributes BaseAttributes
         {
@@ -29,7 +30,7 @@ namespace Effects
                 return;
             }
 
-            ComputeAttributes();
+            UpdateEffectResultCache();
         }
 
         public void Update()
@@ -40,7 +41,7 @@ namespace Effects
                 .ToDictionary(e => e.Name);
             if (_effects.Count != newEffects.Count)
             {
-                ComputeAttributes();
+                UpdateEffectResultCache();
             }
 
             _effects = newEffects;
@@ -48,9 +49,14 @@ namespace Effects
 
         private void ComputeAttributes()
         {
+            ComputedAttributes = _baseAttributes.ApplyEffect(_combinedEffectResult);
+        }
+
+        private void UpdateEffectResultCache()
+        {
             var effectResults = _effects.Values.Select(e => e.PerformEffect()).ToList();
-            var composedEffectResult = new CombinedEffectResult(effectResults);
-            ComputedAttributes = composedEffectResult.ApplyAdditionEffect(_baseAttributes);
+            _combinedEffectResult = new CombinedEffectResult(effectResults);
+            ComputeAttributes();
         }
     }
 }

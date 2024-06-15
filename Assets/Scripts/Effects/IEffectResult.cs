@@ -5,13 +5,13 @@ namespace Effects
     public interface IEffectResult
     {
         // Return the delta of the attributes
-        public Attributes ApplyAdditionEffect(Attributes attributes);
+        public Attributes ApplyAdditionEffect();
 
         // Return the percentage delta of the attributes
-        public Attributes ApplyPercentageEffect(Attributes attributes);
+        public Attributes ApplyPercentageEffect();
 
-        // Return the new attributes with the min and max values applied
-        public Attributes ApplyMinMaxEffect(Attributes attributes);
+        // Return the min attribute and the max attribute
+        public (Attributes, Attributes) ApplyMinMaxEffect();
     }
 
     public class AdditionEffectResult : IEffectResult
@@ -23,19 +23,19 @@ namespace Effects
             _attributes = attributes;
         }
 
-        public Attributes ApplyAdditionEffect(Attributes attributes)
+        public Attributes ApplyAdditionEffect()
         {
             return _attributes;
         }
 
-        public Attributes ApplyPercentageEffect(Attributes attributes)
+        public Attributes ApplyPercentageEffect()
         {
             return Attributes.One;
         }
 
-        public Attributes ApplyMinMaxEffect(Attributes attributes)
+        public (Attributes, Attributes) ApplyMinMaxEffect()
         {
-            return attributes;
+            return (Attributes.NegativeInfinity, Attributes.PositiveInfinity);
         }
     }
 
@@ -48,95 +48,94 @@ namespace Effects
             _attributes = attributes;
         }
 
-        public Attributes ApplyAdditionEffect(Attributes attributes)
+        public Attributes ApplyAdditionEffect()
         {
             return Attributes.Zero;
         }
 
-        public Attributes ApplyPercentageEffect(Attributes attributes)
+        public Attributes ApplyPercentageEffect()
         {
             return _attributes;
         }
 
-        public Attributes ApplyMinMaxEffect(Attributes attributes)
+        public (Attributes, Attributes) ApplyMinMaxEffect()
         {
-            return attributes;
+            return (Attributes.NegativeInfinity, Attributes.PositiveInfinity);
         }
     }
 
     public class MinMaxEffectResult : IEffectResult
     {
-        private readonly Attributes _attributes;
+        private readonly Attributes _min, _max;
 
-        public MinMaxEffectResult(Attributes attributes)
+        public MinMaxEffectResult(Attributes min, Attributes max)
         {
-            _attributes = attributes;
+            _min = min;
+            _max = max;
         }
 
-        public Attributes ApplyAdditionEffect(Attributes attributes)
+        public Attributes ApplyAdditionEffect()
         {
             return Attributes.Zero;
         }
 
-        public Attributes ApplyPercentageEffect(Attributes attributes)
+        public Attributes ApplyPercentageEffect()
         {
             return Attributes.One;
         }
 
-        public Attributes ApplyMinMaxEffect(Attributes attributes)
+        public (Attributes, Attributes) ApplyMinMaxEffect()
         {
-            return _attributes;
+            return (_min, _max);
         }
     }
 
     public class CombinedEffectResult : IEffectResult
     {
-        private readonly List<IEffectResult> _effects;
+        private readonly Attributes _additionResult, _percentageResult, _minResult, _maxResult;
 
         public CombinedEffectResult(List<IEffectResult> effects)
         {
-            _effects = effects;
-        }
+            _additionResult = Attributes.Zero;
+            _percentageResult = Attributes.One;
+            _minResult = Attributes.NegativeInfinity;
+            _maxResult = Attributes.PositiveInfinity;
 
-        public CombinedEffectResult(params IEffectResult[] effects)
-        {
-            _effects = new List<IEffectResult>(effects);
-        }
-
-        public Attributes ApplyAdditionEffect(Attributes attributes)
-        {
-            Attributes result = Attributes.Zero;
-            foreach (IEffectResult effect in _effects)
+            foreach (var effect in effects)
             {
-                var e = effect.ApplyAdditionEffect(attributes);
-                result += e;
+                var er = effect.ApplyAdditionEffect();
+                _additionResult += er;
             }
 
-            return result;
-        }
-
-        public Attributes ApplyPercentageEffect(Attributes attributes)
-        {
-            Attributes result = Attributes.One;
-            foreach (IEffectResult effect in _effects)
+            foreach (var effect in effects)
             {
-                var e = effect.ApplyPercentageEffect(attributes);
-                result += e;
+                var er = effect.ApplyPercentageEffect();
+                _percentageResult *= er;
             }
 
-            return result;
+            foreach (var effect in effects)
+            {
+                var (min, max) = effect.ApplyMinMaxEffect();
+                _minResult = Attributes.ApplyMax(_minResult, min);
+                _maxResult = Attributes.ApplyMin(_maxResult, max);
+            }
         }
 
-        public Attributes ApplyMinMaxEffect(Attributes attributes)
-        {
-            Attributes result = attributes;
-            foreach (IEffectResult effect in _effects)
-            {
-                var e = effect.ApplyMinMaxEffect(result);
-                result = e;
-            }
+        public CombinedEffectResult(params IEffectResult[] effects) : this(new List<IEffectResult>(effects)) {}
 
-            return result;
+        public Attributes ApplyAdditionEffect()
+        {
+            return _additionResult;
+        }
+
+        public Attributes ApplyPercentageEffect()
+        {
+            return _percentageResult;
+        }
+
+        public (Attributes, Attributes) ApplyMinMaxEffect()
+        {
+            return (_minResult, _maxResult);
         }
     }
 }

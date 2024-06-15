@@ -6,41 +6,35 @@ using UnityEngine;
 
 namespace Entities
 {
-    public class ChestLogic : MonoBehaviour, IInteractable
+    public class ShopCabinetLogic : MonoBehaviour, IInteractable
     {
-        private ChestLidRotationLogic _chestLidRotationLogic;
         private ItemStack _itemStack;
         public Transform innerItemSpawnPoint;
 
-        public void Start()
-        {
-            _chestLidRotationLogic = GetComponent<ChestLidRotationLogic>();
-        }
-
-        public void BindItemStack(List<IInstantiableItem> items)
+        public void BindItemStack(IInstantiableItem item)
         {
             var itemStackContainer = new GameObject("ItemStack");
             itemStackContainer.transform.SetParent(transform);
             itemStackContainer.transform.position = innerItemSpawnPoint.position;
             _itemStack = itemStackContainer.AddComponent<ItemStack>();
-            _itemStack.BindItems(items);
+            _itemStack.BindItems(new List<IInstantiableItem> { new ShopItem(item) });
         }
 
-        public InteractableAction[] AvailableInteractions(PlayerComponents _)
+        public InteractableAction[] AvailableInteractions(PlayerComponents playerComponents)
         {
             if (_itemStack.Empty)
             {
-                _chestLidRotationLogic.TakeItem();
                 return new InteractableAction[] { };
             }
 
-            var disabled = !_chestLidRotationLogic.IsChestOpen() || !_itemStack.AllowInteract();
+            var item = _itemStack.Peek();
+            var disabled = playerComponents.Inventory.Coins < item.Cost;
             return new[]
             {
                 new InteractableAction
                 {
                     Key = KeyBinding.PrimaryInteraction,
-                    Prompt = $"Take {_itemStack.Peek().Name} {(disabled ? "(Disabled)" : "")}",
+                    Prompt = $"Buy {item.Name} for ${item.Cost} {(disabled ? "(Disabled)" : "")}",
                     Disabled = disabled
                 }
             };

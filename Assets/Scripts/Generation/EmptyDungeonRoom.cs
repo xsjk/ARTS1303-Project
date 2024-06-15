@@ -11,9 +11,11 @@ public class EmptyDungeonRoom : IDungeonRoom
 
     private static readonly Vector2 Mean = new(20.0f, 20.0f);
     private static readonly Vector2 StdDev = new(2.5f, 2.5f);
+    public virtual Vector2 Size { get; } = IDungeonRoom.SampleFromNormalDistribution(Rng.Rand, Mean, StdDev);
+    
     private static readonly int WallLayer = LayerMask.NameToLayer("Wall");
 
-    protected GameObject _room { get; private set; }
+    protected GameObject Room;
 
     private readonly Dictionary<WallOrientation, List<GameObject>> _hallwaySlots = new()
     {
@@ -24,10 +26,7 @@ public class EmptyDungeonRoom : IDungeonRoom
     };
 
     public Vector2 Padding { get; } = new(40.0f, 40.0f);
-    public Vector2 Size { get; } = IDungeonRoom.SampleFromNormalDistribution(Rng.Rand, Mean, StdDev);
     public Vector2 Position { get; private set; }
-
-    public List<IDungeonRoom> ConnectedRooms { get; } = new();
 
     private static bool ShouldAddToHallwaySlots(int numberOfWalls, int index, int spaceBetween = 4)
     {
@@ -123,12 +122,12 @@ public class EmptyDungeonRoom : IDungeonRoom
         }
     }
 
-    private void CreateNavMesh(GameObject parent) {
+    public void Bake() {
         // add nav mesh to the parent and dynamic bake for all the children
-        var navMesh = parent.AddComponent<NavMeshSurface>();
+        var navMesh = Room.AddComponent<NavMeshSurface>();
 
         // // add mesh collider to all children
-        // foreach (var mf in parent.GetComponentsInChildren<MeshFilter>())
+        // foreach (var mf in Room.GetComponentsInChildren<MeshFilter>())
         // {
         //     var go = mf.gameObject;
         //     if (go.GetComponent<MeshCollider>() == null)
@@ -144,7 +143,7 @@ public class EmptyDungeonRoom : IDungeonRoom
     {
         Position = position;
         Debug.Log($"We are placing room {Id} at {position} with size {Size} and padding {Padding}");
-        _room = new GameObject($"Room {Id}")
+        Room = new GameObject($"Room {Id}")
         {
             transform =
             {
@@ -152,22 +151,21 @@ public class EmptyDungeonRoom : IDungeonRoom
             }
         };
         // build walls
-        CreateWall(_room, "North Wall", WallOrientation.North, new Vector3(-Size.x / 2, 0, -Size.y / 2),
+        CreateWall(Room, "North Wall", WallOrientation.North, new Vector3(-Size.x / 2, 0, -Size.y / 2),
             new Vector3(Size.x / 2, 0, -Size.y / 2));
-        CreateWall(_room, "South Wall", WallOrientation.South, new Vector3(-Size.x / 2, 0, Size.y / 2),
+        CreateWall(Room, "South Wall", WallOrientation.South, new Vector3(-Size.x / 2, 0, Size.y / 2),
             new Vector3(Size.x / 2, 0, Size.y / 2));
-        CreateWall(_room, "East Wall", WallOrientation.East, new Vector3(Size.x / 2, 0, -Size.y / 2),
+        CreateWall(Room, "East Wall", WallOrientation.East, new Vector3(Size.x / 2, 0, -Size.y / 2),
             new Vector3(Size.x / 2, 0, Size.y / 2));
-        CreateWall(_room, "West Wall", WallOrientation.West, new Vector3(-Size.x / 2, 0, -Size.y / 2),
+        CreateWall(Room, "West Wall", WallOrientation.West, new Vector3(-Size.x / 2, 0, -Size.y / 2),
             new Vector3(-Size.x / 2, 0, Size.y / 2));
-        CreateFloor(_room, "Floor", false, new Vector3(-Size.x / 2, 0, -Size.y / 2),
+        CreateFloor(Room, "Floor", false, new Vector3(-Size.x / 2, 0, -Size.y / 2),
             new Vector3(Size.x / 2, 0, Size.y / 2), DungeonRoomPrefabManager.Instance.FloorPrefab,
             DungeonRoomPrefabManager.Instance.FloorBounds.size);
-        CreateFloor(_room, "Ceiling", true, new Vector3(-Size.x / 2, DungeonRoomPrefabManager.Height, -Size.y / 2),
+        CreateFloor(Room, "Ceiling", true, new Vector3(-Size.x / 2, DungeonRoomPrefabManager.Height, -Size.y / 2),
             new Vector3(Size.x / 2, DungeonRoomPrefabManager.Height, Size.y / 2),
             DungeonRoomPrefabManager.Instance.CeilingPrefab,
             DungeonRoomPrefabManager.Instance.CeilingBounds.size);
-        CreateNavMesh(_room);
     }
 
     public Dictionary<WallOrientation, int> GetAvailableOrientation()
@@ -192,14 +190,5 @@ public class EmptyDungeonRoom : IDungeonRoom
         var go = _hallwaySlots[wo][r];
         _hallwaySlots[wo].RemoveAt(r);
         return go;
-    }
-
-    public virtual void DecreaseEnemyCount()
-    {
-    }
-
-    public virtual bool RoomCleared()
-    {
-        return true;
     }
 }
